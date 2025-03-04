@@ -5,7 +5,6 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// Product Class (Encapsulation)
 class Product {
     #price;
     constructor(name, price, stock) {
@@ -21,7 +20,6 @@ class Product {
     }
 }
 
-// Inheritance Example (Perishable Product)
 class PerishableProduct extends Product {
     constructor(name, price, stock, expirationDate) {
         super(name, price, stock);
@@ -29,7 +27,6 @@ class PerishableProduct extends Product {
     }
 }
 
-// Store Class (Encapsulation & Abstraction)
 class Store {
     #transactions = [];
     constructor() {
@@ -40,8 +37,8 @@ class Store {
     }
     listProducts() {
         console.log("\nAvailable Products:");
-        this.products.forEach((p, index) => {
-            console.log(`${index + 1}. ${p.name} - $${p.getPrice()} - Stock: ${p.stock}`);
+        this.products.forEach(function (p, index) {
+            console.log((index + 1) + ". " + p.name + " - $" + p.getPrice() + " - Stock: " + p.stock);
         });
     }
     buyProduct(index, quantity) {
@@ -50,7 +47,7 @@ class Store {
             product.updateStock(quantity);
             const total = product.getPrice() * quantity;
             this.#transactions.push({ name: product.name, quantity, total });
-            console.log(`\n✅ Purchase successful! Total: $${total}\n`);
+            console.log("\n✅ Purchase successful! Total: $" + total + "\n");
         } else {
             console.log("\n❌ Insufficient stock!\n");
         }
@@ -58,15 +55,21 @@ class Store {
     generateReport() {
         console.log("\n📊 Day's Sales Report:");
         let totalSales = 0;
-        this.#transactions.forEach((t, index) => {
-            console.log(`${index + 1}. ${t.name} - ${t.quantity} pcs - $${t.total}`);
+        this.#transactions.forEach(function (t, index) {
+            console.log((index + 1) + ". " + t.name + " - " + t.quantity + " pcs - $" + t.total);
             totalSales += t.total;
         });
-        console.log(`\n💰 Total Sales: $${totalSales}\n`);
+        console.log("\n💰 Total Sales: $" + totalSales + "\n");
     }
 }
 
 const store = new Store();
+
+function askQuestion(question, callback) {
+    rl.question(question, function (answer) {
+        callback(answer);
+    });
+}
 
 function mainMenu() {
     console.log("\nSelect an action:");
@@ -76,11 +79,11 @@ function mainMenu() {
     console.log("4. Close Day");
     console.log("5. Generate Report");
     console.log("6. Exit");
-    rl.question("Enter choice: ", (choice) => {
+    askQuestion("Enter choice: ", function (choice) {
         if (choice === "1") {
-            rl.question("Product Name: ", (name) => {
-                rl.question("Product Price: ", (price) => {
-                    rl.question("Stock Quantity: ", (stock) => {
+            askQuestion("Product Name: ", function (name) {
+                askQuestion("Product Price: ", function (price) {
+                    askQuestion("Stock Quantity: ", function (stock) {
                         store.addProduct(new Product(name, parseFloat(price), parseInt(stock)));
                         console.log("\n✅ Product added!\n");
                         mainMenu();
@@ -92,8 +95,8 @@ function mainMenu() {
             mainMenu();
         } else if (choice === "3") {
             store.listProducts();
-            rl.question("Enter product number: ", (index) => {
-                rl.question("Quantity to buy: ", (quantity) => {
+            askQuestion("Enter product number: ", function (index) {
+                askQuestion("Quantity to buy: ", function (quantity) {
                     store.buyProduct(parseInt(index) - 1, parseInt(quantity));
                     mainMenu();
                 });
