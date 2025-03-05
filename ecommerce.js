@@ -6,15 +6,9 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-class Person {
-    constructor(name) {
-        this.name = name;
-    }
-}
-
-class Employee extends Person {
+class Employee {
     constructor(name, role) {
-        super(name);
+        this.name = name;
         this.role = role;
     }
 }
@@ -36,10 +30,15 @@ class EmployeeManager {
         fs.writeFileSync("employees.json", JSON.stringify(this.employees, null, 2));
     }
 
-    addEmployee(employee) {
-        this.employees.push(employee);
-        this.saveEmployees();
-        console.log("\n✅ Employee added!\n");
+    addEmployee(emp) {
+
+        {
+            this.employees.push(emp);
+            this.saveEmployees();
+            console.log("\n✅ Employee added!\n");
+        }
+
+
     }
 
     listEmployees() {
@@ -47,92 +46,6 @@ class EmployeeManager {
         this.employees.forEach((employee, index) => {
             console.log(`${index + 1}. ${employee.name} - ${employee.role}`);
         });
-    }
-}
-
-class Product {
-    constructor(name, brand, model, price, stock) {
-        this.name = name;
-        this.brand = brand;
-        this.model = model;
-        this.price = price;
-        this.stock = stock;
-    }
-}
-
-class Shoes extends Product {
-    constructor(name, brand, model, price, stock, size) {
-        super(name, brand, model, price, stock);
-        this.size = size;
-    }
-}
-
-class Shirt extends Product {
-    constructor(name, brand, model, price, stock, size) {
-        super(name, brand, model, price, stock);
-        this.size = size;
-    }
-}
-
-class Coat extends Product {
-    constructor(name, brand, model, price, stock, material) {
-        super(name, brand, model, price, stock);
-        this.material = material;
-    }
-}
-
-class Trousers extends Product {
-    constructor(name, brand, model, price, stock, waistSize) {
-        super(name, brand, model, price, stock);
-        this.waistSize = waistSize;
-    }
-}
-
-class Socks extends Product {
-    constructor(name, brand, model, price, stock, length) {
-        super(name, brand, model, price, stock);
-        this.length = length;
-    }
-}
-
-class Hat extends Product {
-    constructor(name, brand, model, price, stock, circumference) {
-        super(name, brand, model, price, stock);
-        this.circumference = circumference;
-    }
-}
-
-class Cart {
-    constructor() {
-        this.items = [];
-    }
-
-    addToCart(product, quantity) {
-        this.items.push({ product, quantity });
-        console.log("\n✅ Product added to cart!\n");
-    }
-
-    listCart() {
-        console.log("\n=== Cart Contents ===");
-        this.items.forEach((item, index) => {
-            console.log(`${index + 1}. ${item.product.name} - Quantity: ${item.quantity}`);
-        });
-    }
-
-    checkout(store) {
-        let total = 0;
-        this.items.forEach(({ product, quantity }) => {
-            let productIndex = store.products.findIndex(p => p.name === product.name);
-            if (productIndex !== -1 && store.products[productIndex].stock >= quantity) {
-                store.products[productIndex].stock -= quantity;
-                total += product.price * quantity;
-            }
-        });
-        store.saveProducts();
-        store.sales.push({ employee: currentEmployee.name, items: this.items, total });
-        store.saveSales();
-        console.log(`\n🛒 Checkout Complete! Total: $${total}\n`);
-        this.items = [];
     }
 }
 
@@ -169,90 +82,158 @@ class Store {
     listProducts() {
         console.log("\n=== Product List ===");
         this.products.forEach((product, index) => {
-            console.log(`${index + 1}. ${product.name} - ${product.brand} - ${product.price} - Stock: ${product.stock}`);
+            console.log(`${index + 1}. ${product.brand} ${product.model} - $${product.price} (Stock: ${product.stock})`);
         });
     }
 }
 
-let currentEmployee = null;
-let cart = new Cart();
-const store = new Store();
-const employeeManager = new EmployeeManager();
+class Cart {
+    constructor() {
+        this.items = [];
+    }
 
-function storeMenu() {
-    console.log("\n=== Store Menu ===");
-    console.log("1. Add Product to Cart");
-    console.log("2. List Cart Items");
-    console.log("3. Checkout");
-    console.log("4. Show Report");
-    console.log("5. Logout");
-    console.log("6. Exit");
-    rl.question("Enter choice: ", function(choice) {
-        if (choice === "1") {
-            store.listProducts();
-            rl.question("Select product number: ", function(index) {
-                rl.question("Enter quantity: ", function(quantity) {
-                    cart.addToCart(store.products[parseInt(index) - 1], parseInt(quantity));
-                    storeMenu();
-                });
-            });
-        } else if (choice === "2") {
-            cart.listCart();
-            storeMenu();
-        } else if (choice === "3") {
-            cart.checkout(store);
-            storeMenu();
-        } else if (choice === "4") {
-            console.log("\n=== Sales Report ===");
-            console.log(store.sales);
-            storeMenu();
-        } else if (choice === "5") {
-            mainMenu();
-        } else if (choice === "6") {
-            console.log("\n👋 Exiting program!");
-            rl.close();
-        } else {
-            console.log("\n❌ Invalid choice! Try again.");
-            storeMenu();
-        }
-    });
+    addToCart(product, quantity) {
+        this.items.push({ product, quantity });
+        console.log("\n✅ Product added to cart!\n");
+    }
+
+    listCart() {
+        console.log("\n=== Cart Contents ===");
+        this.items.forEach((item, index) => {
+            console.log(`${index + 1}. ${item.product.brand} ${item.product.model} - Quantity: ${item.quantity}`);
+        });
+    }
+
+    checkout(store) {
+        let total = 0;
+        this.items.forEach(({ product, quantity }) => {
+            let productIndex = store.products.findIndex(p => p.brand === product.brand && p.model === product.model);
+            if (productIndex !== -1 && store.products[productIndex].stock >= quantity) {
+                store.products[productIndex].stock -= quantity;
+                total += product.price * quantity;
+            }
+        });
+        store.sales.push({ employee: currentEmployee.name, items: this.items, total });
+        store.saveProducts();
+        store.saveSales();
+        console.log(`\n🛒 Checkout Complete! Total: $${total}\n`);
+        this.items = [];
+    }
 }
+
+const employeeManager = new EmployeeManager();
+const store = new Store();
+const cart = new Cart();
+let currentEmployee = null;
 
 function mainMenu() {
     console.log("\n=== Main Menu ===");
     console.log("1. Add Employee");
     console.log("2. List Employees");
     console.log("3. Select Employee");
-    console.log("4. Exit");
-    rl.question("Enter choice: ", function(choice) {
-        if (choice === "1") {
-            rl.question("Enter Employee Name: ", function(name) {
-                rl.question("Enter Role: ", function(role) {
-                    employeeManager.addEmployee(new Employee(name, role));
+    console.log("4. Add Product");
+    console.log("5. List Products");
+    console.log("6. Show Sales Report");
+    console.log("7. Exit");
+    rl.question("Choose an option: ", function (choice) {
+        switch (choice) {
+            case "1":
+                rl.question("Enter Employee Name: ", function(name) {
+                    rl.question("Enter Role: ", function(role) {
+                        employeeManager.addEmployee(new Employee(name, role));
+                        mainMenu();
+                    });
+                });
+                break;
+            case "2":
+                employeeManager.listEmployees();
+                mainMenu();
+                break;
+            case "3":
+                selectEmployee();
+                break;
+            case "4":
+                addProduct();
+                break;
+            case "5":
+                store.listProducts();
+                mainMenu();
+                break;
+            case "6":
+                showSalesReport();
+                break;
+            case "7":
+                console.log("Exiting program.");
+                rl.close();
+                break;
+            default:
+                mainMenu();
+        }
+    });
+}
+
+function addProduct() {
+    rl.question("Enter product brand: ", function (brand) {
+        rl.question("Enter product model: ", function (model) {
+            rl.question("Enter price: ", function (price) {
+                rl.question("Enter stock quantity: ", function (stock) {
+                    const newProduct = { brand, model, price: parseFloat(price), stock: parseInt(stock) };
+                    store.products.push(newProduct);
+                    store.saveProducts();
+                    console.log("\n✅ Product added successfully!\n");
                     mainMenu();
                 });
             });
-        } else if (choice === "2") {
-            employeeManager.listEmployees();
-            mainMenu();
-        } else if (choice === "3") {
-            employeeManager.listEmployees();
-            rl.question("Select employee number: ", function(index) {
-                currentEmployee = employeeManager.employees[parseInt(index) - 1];
-                if (currentEmployee) {
-                    console.log(`\n✅ ${currentEmployee.name} selected!\n`);
-                    storeMenu();
-                } else {
-                    console.log("❌ Invalid selection.");
-                    mainMenu();
-                }
+        });
+    });
+}
+
+function selectEmployee() {
+    employeeManager.listEmployees();
+    rl.question("Select Employee Number: ", function (index) {
+        currentEmployee = employeeManager.employees[parseInt(index) - 1];
+        console.log(`\n👤 Logged in as: ${currentEmployee.name}\n`);
+        employeeMenu();
+    });
+}
+
+function showSalesReport() {
+    console.log("\n=== Sales Report ===");
+    console.log(JSON.stringify(store.sales, null, 2));
+    mainMenu();
+}
+
+function employeeMenu() {
+    console.log("\n=== Employee Menu ===");
+    console.log("1. Add to Cart");
+    console.log("2. List Cart");
+    console.log("3. Checkout");
+    console.log("4. Logout");
+    rl.question("Choose an option: ", function (choice) {
+        switch (choice) {
+            case "1":
+                store.listProducts();
+            rl.question("Select product number: ", function(index) {
+                rl.question("Enter quantity: ", function(quantity) {
+                    cart.addToCart(store.products[parseInt(index) - 1], parseInt(quantity));
+                    employeeMenu();
+                });
             });
-        } else if (choice === "4") {
-            console.log("\n👋 Exiting program!");
-            rl.close();
-        } else {
-            console.log("\n❌ Invalid choice! Try again.");
-            mainMenu();
+                break;
+            case "2":
+                cart.listCart();
+                employeeMenu();
+                break;
+            case "3":
+                cart.checkout(store);
+                employeeMenu();
+                break;
+            case "4":
+                currentEmployee = null;
+                mainMenu();
+                break;
+            default:
+                employeeMenu();
         }
     });
 }
