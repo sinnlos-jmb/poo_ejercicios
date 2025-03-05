@@ -114,5 +114,66 @@
       }
     ],
     "total": 11953
+  },
+  {
+    "employee": "romeo",
+    "items": [
+      {
+        "product": {
+          "name": "gorra racing",
+          "brand": "reebok",
+          "model": "sport",
+          "price": 3333,
+          "stock": 13
+        },
+        "quantity": 5
+      },
+      {
+        "product": {
+          "name": "zapatillas",
+          "brand": "nike",
+          "model": "lebron",
+          "price": 3333,
+          "stock": 3217
+        },
+        "quantity": 5
+      }
+    ],
+    "total": 33330
+  },
+  {
+    "employee": "romeo",
+    "items": [
+      {
+        "product": {
+          "name": "coat",
+          "brand": "levis",
+          "model": "gamulan",
+          "price": 333,
+          "stock": 2105
+        },
+        "quantity": 3
+      },
+      {
+        "product": {
+          "name": "zapatilla",
+          "brand": "nike",
+          "model": "jordan",
+          "price": 333,
+          "stock": 2185
+        },
+        "quantity": 3
+      },
+      {
+        "product": {
+          "brand": "gorra lakers",
+          "model": "champs",
+          "price": 32,
+          "stock": 3328
+        },
+        "quantity": 5
+      }
+    ],
+    "total": 2158
   }
 ]

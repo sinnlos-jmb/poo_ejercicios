@@ -4,7 +4,7 @@
     "brand": "nike",
     "model": "jordan",
     "price": 333,
-    "stock": 2188
+    "stock": 2185
   },
   {
     "name": "shirt",
@@ -18,7 +18,7 @@
     "brand": "levis",
     "model": "gamulan",
     "price": 333,
-    "stock": 2108
+    "stock": 2105
   },
   {
     "name": "nike",
@@ -33,7 +33,7 @@
     "brand": "reebok",
     "model": "sport",
     "price": 3333,
-    "stock": 18
+    "stock": 13
   },
   {
     "category": "1",
@@ -41,5 +41,25 @@
     "model": "borusia",
     "price": 233,
     "stock": 3222
+  },
+  {
+    "name": "zapatillas",
+    "brand": "nike",
+    "model": "lebron",
+    "price": 3333,
+    "stock": 3217
+  },
+  {
+    "name": "gorro warriors",
+    "brand": "nike",
+    "model": "blue",
+    "price": 33,
+    "stock": 2222
+  },
+  {
+    "brand": "gorra lakers",
+    "model": "champs",
+    "price": 32,
+    "stock": 3328
   }
 ]
