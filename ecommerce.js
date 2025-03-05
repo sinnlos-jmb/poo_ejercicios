@@ -6,6 +6,73 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
+// Base Product class (atributo tipo en vez de subclases?)
+class Product {
+    constructor(brand, model, price, stock) {
+        this.brand = brand;
+        this.model = model;
+        this.price = price;
+        this.stock = stock;
+    }
+
+    getDetails() {
+        return `${this.brand} ${this.model}`;
+    }
+
+    // Static method to reconstruct the correct product type
+    static reconstruct(productData) {
+        // Determine the product type based on additional properties
+        if (productData.warrantyYears !== undefined) {
+            return Object.assign(new Electronics(), productData);
+        } else if (productData.size !== undefined) {
+            return Object.assign(new Clothing(), productData);
+        } else if (productData.dimensions !== undefined) {
+            return Object.assign(new Furniture(), productData);
+        }
+        // Default to base Product if no specific type is found
+        return Object.assign(new Product(), productData);
+    }
+}
+
+// Subclasses of Product
+class Electronics extends Product {
+    constructor(brand, model, price, stock, warrantyYears) {
+        super(brand, model, price, stock);
+        this.warrantyYears = warrantyYears;
+        this.category = 'Electronics';
+    }
+
+    getDetails() {
+        return `${super.getDetails()} (${this.category}) - Warranty: ${this.warrantyYears} years`;
+    }
+}
+
+class Clothing extends Product {
+    constructor(brand, model, price, stock, size, material) {
+        super(brand, model, price, stock);
+        this.size = size;
+        this.material = material;
+        this.category = 'Clothing';
+    }
+
+    getDetails() {
+        return `${super.getDetails()} (${this.category}) - Size: ${this.size}, Material: ${this.material}`;
+    }
+}
+
+class Furniture extends Product {
+    constructor(brand, model, price, stock, dimensions, color) {
+        super(brand, model, price, stock);
+        this.dimensions = dimensions;
+        this.color = color;
+        this.category = 'Furniture';
+    }
+
+    getDetails() {
+        return `${super.getDetails()} (${this.category}) - Dimensions: ${this.dimensions}, Color: ${this.color}`;
+    }
+}
+
 class Employee {
     constructor(name, role) {
         this.name = name;
@@ -44,6 +111,47 @@ class EmployeeManager {
     }
 }
 
+class Cart {
+    constructor() {
+        this.items = [];
+    }
+
+    addToCart(product, quantity) {
+        this.items.push({ product, quantity });
+        console.log("\n✅ Product added to cart!\n");
+    }
+
+    listCart() {
+        console.log("\n=== Cart Contents ===");
+        this.items.forEach((item, index) => {
+            console.log(`${index + 1}. ${item.product.getDetails()} - Quantity: ${item.quantity}`);
+        });
+    }
+
+    checkout(store) {
+        let total = 0;
+        this.items.forEach(({ product, quantity }) => {
+            let productIndex = store.products.findIndex(p => 
+                p.brand === product.brand && 
+                p.model === product.model
+            );
+            if (productIndex !== -1 && store.products[productIndex].stock >= quantity) {
+                store.products[productIndex].stock -= quantity;
+                total += product.price * quantity;
+            }
+        });
+        store.sales.push({ 
+            employee: store.currentEmployee.name, 
+            items: this.items, 
+            total 
+        });
+        store.saveProducts();
+        store.saveSales();
+        console.log(`\n🛒 Checkout Complete! Total: $${total}\n`);
+        this.items = [];
+    }
+}
+
 class Store {
     constructor(employeeManager, cart) {
         this.products = this.loadProducts();
@@ -51,11 +159,20 @@ class Store {
         this.employeeManager = employeeManager;
         this.cart = cart;
         this.currentEmployee = null;
+        
+        // Available product types
+        this.productTypes = [
+            { name: 'Electronics', class: Electronics },
+            { name: 'Clothing', class: Clothing },
+            { name: 'Furniture', class: Furniture }
+        ];
     }
 
     loadProducts() {
         try {
-            return JSON.parse(fs.readFileSync("products.json"));
+            // Parse JSON and reconstruct each product to its correct type
+            const rawProducts = JSON.parse(fs.readFileSync("products.json"));
+            return rawProducts.map(productData => Product.reconstruct(productData));
         } catch (error) {
             return [];
         }
@@ -80,29 +197,95 @@ class Store {
     listProducts() {
         console.log("\n=== Product List ===");
         this.products.forEach((product, index) => {
-            console.log(`${index + 1}. ${product.brand} ${product.model} - $${product.price} (Stock: ${product.stock})`);
+            console.log(`${index + 1}. ${product.getDetails()} - $${product.price} (Stock: ${product.stock})`);
         });
     }
 
     addProduct() {
-        rl.question("Enter product brand: ", (brand) => {
-            rl.question("Enter product model: ", (model) => {
-                rl.question("Enter price: ", (price) => {
-                    rl.question("Enter stock quantity: ", (stock) => {
-                        const newProduct = { 
-                            brand, 
-                            model, 
-                            price: parseFloat(price), 
-                            stock: parseInt(stock) 
-                        };
-                        this.products.push(newProduct);
-                        this.saveProducts();
-                        console.log("\n✅ Product added successfully!\n");
-                        mainMenu();
+        // List available product types
+        console.log("\n=== Select Product Type ===");
+        this.productTypes.forEach((type, index) => {
+            console.log(`${index + 1}. ${type.name}`);
+        });
+
+        rl.question("Choose Product Type: ", (typeChoice) => {
+            const selectedType = this.productTypes[parseInt(typeChoice) - 1];
+            
+            if (!selectedType) {
+                console.log("Invalid product type selected.");
+                mainMenu();
+                return;
+            }
+
+            // Common product details... preguntar primero type
+            rl.question("Enter product brand: ", (brand) => {
+                rl.question("Enter product model: ", (model) => {
+                    rl.question("Enter price: ", (price) => {
+                        rl.question("Enter stock quantity: ", (stock) => {
+                            // Additional details based on product type
+                            this.addProductByType(selectedType, brand, model, price, stock);
+                        });
                     });
                 });
             });
         });
+    }
+
+    addProductByType(selectedType, brand, model, price, stock) {
+        switch(selectedType.name) {
+            case 'Electronics':
+                rl.question("Enter warranty years: ", (warrantyYears) => {
+                    const newProduct = new selectedType.class(
+                        brand, 
+                        model, 
+                        parseFloat(price), 
+                        parseInt(stock),
+                        parseInt(warrantyYears)
+                    );
+                    this.saveNewProduct(newProduct);
+                });
+                break;
+            
+            case 'Clothing':
+                rl.question("Enter size: ", (size) => {
+                    rl.question("Enter material: ", (material) => {
+                        const newProduct = new selectedType.class(
+                            brand, 
+                            model, 
+                            parseFloat(price), 
+                            parseInt(stock),
+                            size,
+                            material
+                        );
+                        this.saveNewProduct(newProduct);
+                    });
+                });
+                break;
+            
+            case 'Furniture':
+                rl.question("Enter dimensions: ", (dimensions) => {
+                    rl.question("Enter color: ", (color) => {
+                        const newProduct = new selectedType.class(
+                            brand, 
+                            model, 
+                            parseFloat(price), 
+                            parseInt(stock),
+                            dimensions,
+                            color
+                        );
+                        this.saveNewProduct(newProduct);
+                    });
+                });
+                break;
+        }
+    }
+
+    saveNewProduct(newProduct) {
+        this.products.push(newProduct);
+        this.saveProducts();
+        console.log("\n✅ Product added successfully!");
+        console.log(`Details: ${newProduct.getDetails()}\n`);
+        mainMenu();
     }
 
     selectEmployee() {
@@ -126,6 +309,7 @@ class Store {
         console.log("2. List Cart");
         console.log("3. Checkout");
         console.log("4. Logout");
+        
         rl.question("Choose an option: ", (choice) => {
             switch (choice) {
                 case "1":
@@ -156,44 +340,6 @@ class Store {
                     this.employeeMenu();
             }
         });
-    }
-}
-
-class Cart {
-    constructor() {
-        this.items = [];
-    }
-
-    addToCart(product, quantity) {
-        this.items.push({ product, quantity });
-        console.log("\n✅ Product added to cart!\n");
-    }
-
-    listCart() {
-        console.log("\n=== Cart Contents ===");
-        this.items.forEach((item, index) => {
-            console.log(`${index + 1}. ${item.product.brand} ${item.product.model} - Quantity: ${item.quantity}`);
-        });
-    }
-
-    checkout(store) {
-        let total = 0;
-        this.items.forEach(({ product, quantity }) => {
-            let productIndex = store.products.findIndex(p => p.brand === product.brand && p.model === product.model);
-            if (productIndex !== -1 && store.products[productIndex].stock >= quantity) {
-                store.products[productIndex].stock -= quantity;
-                total += product.price * quantity;
-            }
-        });
-        store.sales.push({ 
-            employee: store.currentEmployee.name, 
-            items: this.items, 
-            total 
-        });
-        store.saveProducts();
-        store.saveSales();
-        console.log(`\n🛒 Checkout Complete! Total: $${total}\n`);
-        this.items = [];
     }
 }
 

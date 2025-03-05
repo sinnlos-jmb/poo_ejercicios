@@ -1,60 +1,61 @@
 [
   {
-    "name": "zapatilla",
     "brand": "nike",
     "model": "jordan",
     "price": 333,
-    "stock": 2181
+    "stock": 2181,
+    "name": "zapatilla"
   },
   {
-    "name": "shirt",
     "brand": "polo",
     "model": "cool",
     "price": 322,
-    "stock": 2203
+    "stock": 2198,
+    "name": "shirt"
   },
   {
-    "name": "coat",
     "brand": "levis",
     "model": "gamulan",
     "price": 333,
-    "stock": 2105
+    "stock": 2105,
+    "name": "coat"
   },
   {
-    "name": "nike",
     "brand": "nike",
     "model": "jordan",
     "price": 3333,
     "stock": 3216,
-    "size": 12
+    "size": 12,
+    "category": "Clothing",
+    "name": "nike"
   },
   {
-    "name": "gorra racing",
     "brand": "reebok",
     "model": "sport",
     "price": 3333,
-    "stock": 13
+    "stock": 13,
+    "name": "gorra racing"
   },
   {
-    "category": "1",
     "brand": "puma",
     "model": "borusia",
     "price": 233,
-    "stock": 3219
+    "stock": 3219,
+    "category": "1"
   },
   {
-    "name": "zapatillas",
     "brand": "nike",
     "model": "lebron",
     "price": 3333,
-    "stock": 3217
+    "stock": 3217,
+    "name": "zapatillas"
   },
   {
-    "name": "gorro warriors",
     "brand": "nike",
     "model": "blue",
     "price": 33,
-    "stock": 2222
+    "stock": 2222,
+    "name": "gorro warriors"
   },
   {
     "brand": "gorra lakers",
@@ -73,5 +74,14 @@
     "model": "gorra",
     "price": 333,
     "stock": 3333
+  },
+  {
+    "brand": "reebok",
+    "model": "shoes",
+    "price": 333,
+    "stock": 2219,
+    "size": "12",
+    "material": "leather",
+    "category": "Clothing"
   }
 ]
