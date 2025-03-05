@@ -105,4 +105,66 @@ const quickSort = new QuickSort();
 const linearSearch = new LinearSearch();
 const binarySearch = new BinarySearch();
 
+function mainMenu() {
+    console.log("\n=== Main Menu ===");
+    console.log("1. Generate Random Numbers");
+    console.log("2. Sort Numbers");
+    console.log("3. Search for a Number");
+    console.log("4. Exit");
+    rl.question("Choose an option: ", function (choice) {
+        if (choice === "1") {
+            numArray.generateRandomNumbers();
+            console.log("\nNew random numbers generated:", numArray.numbers);
+            mainMenu();
+        } else if (choice === "2") {
+            console.log("\nChoose sorting method:");
+            console.log("1. Bubble Sort");
+            console.log("2. Quick Sort");
+            rl.question("Enter choice: ", function (sortChoice) {
+                let result;
+                if (sortChoice === "1") {
+                    result = bubbleSort.execute(numArray.numbers);
+                } else if (sortChoice === "2") {
+                    result = quickSort.execute(numArray.numbers);
+                }
+                if (result) {
+                    console.log("\nSorted Array:", result.sortedArray);
+                    console.log("Execution Time:", result.time, "ms");
+                }
+                mainMenu();
+            });
+        } else if (choice === "3") {
+            rl.question("Enter number to search: ", function (searchValue) {
+                console.log("\nChoose search method:");
+                console.log("1. Linear Search");
+                console.log("2. Binary Search");
+                rl.question("Enter choice: ", function (searchChoice) {
+                    let result;
+                    if (searchChoice === "1") {
+                        result = linearSearch.execute(numArray.numbers, parseInt(searchValue));
+                    } else if (searchChoice === "2") {
+                        let sortedArr = quickSort.execute(numArray.numbers).sortedArray;
+                        result = binarySearch.execute(sortedArr, parseInt(searchValue));
+                    }
+                    if (result) {
+                        if (result.index !== -1) {
+                            console.log("Number found at index:", result.index);
+                        } else {
+                            console.log("Number not found.");
+                        }
+                        console.log("Execution Time:", result.time, "ms");
+                    }
+                    mainMenu();
+                });
+            });
+        } else if (choice === "4") {
+            console.log("Exiting program.");
+            rl.close();
+        } else {
+            console.log("Invalid choice, try again.");
+            mainMenu();
+        }
+    });
+}
+
 mainMenu();

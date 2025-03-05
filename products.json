@@ -1,0 +1,45 @@
+[
+  {
+    "name": "zapatilla",
+    "brand": "nike",
+    "model": "jordan",
+    "price": 333,
+    "stock": 2188
+  },
+  {
+    "name": "shirt",
+    "brand": "polo",
+    "model": "cool",
+    "price": 322,
+    "stock": 2205
+  },
+  {
+    "name": "coat",
+    "brand": "levis",
+    "model": "gamulan",
+    "price": 333,
+    "stock": 2108
+  },
+  {
+    "name": "nike",
+    "brand": "nike",
+    "model": "jordan",
+    "price": 3333,
+    "stock": 3216,
+    "size": 12
+  },
+  {
+    "name": "gorra racing",
+    "brand": "reebok",
+    "model": "sport",
+    "price": 3333,
+    "stock": 18
+  },
+  {
+    "category": "1",
+    "brand": "puma",
+    "model": "borusia",
+    "price": 233,
+    "stock": 3222
+  }
+]

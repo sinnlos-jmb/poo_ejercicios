@@ -1,0 +1,118 @@
+[
+  {
+    "employee": "pedrito",
+    "items": [
+      {
+        "product": {
+          "name": "shirt",
+          "brand": "polo",
+          "model": "cool",
+          "price": 322,
+          "stock": 2211
+        },
+        "quantity": 11
+      },
+      {
+        "product": {
+          "name": "gorra racing",
+          "brand": "reebok",
+          "model": "sport",
+          "price": 3333,
+          "stock": 21
+        },
+        "quantity": 22
+      }
+    ],
+    "total": 3542
+  },
+  {
+    "employee": "romeo",
+    "items": [
+      {
+        "product": {
+          "name": "shirt",
+          "brand": "polo",
+          "model": "cool",
+          "price": 322,
+          "stock": 2205
+        },
+        "quantity": 2
+      },
+      {
+        "product": {
+          "name": "nike",
+          "brand": "nike",
+          "model": "jordan",
+          "price": 3333,
+          "stock": 3216,
+          "size": 12
+        },
+        "quantity": 3
+      }
+    ],
+    "total": 10643
+  },
+  {
+    "employee": "romeo",
+    "items": [
+      {
+        "product": {
+          "name": "coat",
+          "brand": "levis",
+          "model": "gamulan",
+          "price": 333,
+          "stock": 2108
+        },
+        "quantity": 2
+      },
+      {
+        "product": {
+          "name": "gorra racing",
+          "brand": "reebok",
+          "model": "sport",
+          "price": 3333,
+          "stock": 18
+        },
+        "quantity": 3
+      }
+    ],
+    "total": 10665
+  },
+  {
+    "employee": "mencho",
+    "items": [
+      {
+        "product": {
+          "name": "zapatilla",
+          "brand": "nike",
+          "model": "jordan",
+          "price": 333,
+          "stock": 2188
+        },
+        "quantity": 2
+      },
+      {
+        "product": {
+          "name": "nike",
+          "brand": "nike",
+          "model": "jordan",
+          "price": 3333,
+          "stock": 3216,
+          "size": 12
+        },
+        "quantity": 3
+      },
+      {
+        "product": {
+          "name": "shirt",
+          "brand": "polo",
+          "model": "cool",
+          "price": 322,
+          "stock": 2205
+        },
+        "quantity": 4
+      }
+    ],
+    "total": 11953
+  }
+]
