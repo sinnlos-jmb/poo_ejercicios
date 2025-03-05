@@ -4,14 +4,14 @@
     "brand": "nike",
     "model": "jordan",
     "price": 333,
-    "stock": 2185
+    "stock": 2181
   },
   {
     "name": "shirt",
     "brand": "polo",
     "model": "cool",
     "price": 322,
-    "stock": 2205
+    "stock": 2203
   },
   {
     "name": "coat",
@@ -40,7 +40,7 @@
     "brand": "puma",
     "model": "borusia",
     "price": 233,
-    "stock": 3222
+    "stock": 3219
   },
   {
     "name": "zapatillas",
@@ -61,5 +61,17 @@
     "model": "champs",
     "price": 32,
     "stock": 3328
+  },
+  {
+    "brand": "nike",
+    "model": "shoes",
+    "price": 333,
+    "stock": 3333
+  },
+  {
+    "brand": "nike",
+    "model": "gorra",
+    "price": 333,
+    "stock": 3333
   }
 ]

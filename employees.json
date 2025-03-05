@@ -34,5 +34,13 @@
   {
     "name": "riquelme",
     "role": "manager"
+  },
+  {
+    "name": "javier",
+    "role": "cajero"
+  },
+  {
+    "name": "carlitos",
+    "role": "repositor"
   }
 ]

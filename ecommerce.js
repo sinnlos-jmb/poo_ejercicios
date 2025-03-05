@@ -31,14 +31,9 @@ class EmployeeManager {
     }
 
     addEmployee(emp) {
-
-        {
-            this.employees.push(emp);
-            this.saveEmployees();
-            console.log("\n✅ Employee added!\n");
-        }
-
-
+        this.employees.push(emp);
+        this.saveEmployees();
+        console.log("\n✅ Employee added!\n");
     }
 
     listEmployees() {
@@ -50,9 +45,12 @@ class EmployeeManager {
 }
 
 class Store {
-    constructor() {
+    constructor(employeeManager, cart) {
         this.products = this.loadProducts();
         this.sales = this.loadSales();
+        this.employeeManager = employeeManager;
+        this.cart = cart;
+        this.currentEmployee = null;
     }
 
     loadProducts() {
@@ -85,6 +83,80 @@ class Store {
             console.log(`${index + 1}. ${product.brand} ${product.model} - $${product.price} (Stock: ${product.stock})`);
         });
     }
+
+    addProduct() {
+        rl.question("Enter product brand: ", (brand) => {
+            rl.question("Enter product model: ", (model) => {
+                rl.question("Enter price: ", (price) => {
+                    rl.question("Enter stock quantity: ", (stock) => {
+                        const newProduct = { 
+                            brand, 
+                            model, 
+                            price: parseFloat(price), 
+                            stock: parseInt(stock) 
+                        };
+                        this.products.push(newProduct);
+                        this.saveProducts();
+                        console.log("\n✅ Product added successfully!\n");
+                        mainMenu();
+                    });
+                });
+            });
+        });
+    }
+
+    selectEmployee() {
+        this.employeeManager.listEmployees();
+        rl.question("Select Employee Number: ", (index) => {
+            this.currentEmployee = this.employeeManager.employees[parseInt(index) - 1];
+            console.log(`\n👤 Logged in as: ${this.currentEmployee.name}\n`);
+            this.employeeMenu();
+        });
+    }
+
+    showSalesReport() {
+        console.log("\n=== Sales Report ===");
+        console.log(JSON.stringify(this.sales, null, 2));
+        mainMenu();
+    }
+
+    employeeMenu() {
+        console.log("\n=== Employee Menu ===");
+        console.log("1. Add to Cart");
+        console.log("2. List Cart");
+        console.log("3. Checkout");
+        console.log("4. Logout");
+        rl.question("Choose an option: ", (choice) => {
+            switch (choice) {
+                case "1":
+                    this.listProducts();
+                    rl.question("Select product number: ", (index) => {
+                        rl.question("Enter quantity: ", (quantity) => {
+                            this.cart.addToCart(
+                                this.products[parseInt(index) - 1], 
+                                parseInt(quantity)
+                            );
+                            this.employeeMenu();
+                        });
+                    });
+                    break;
+                case "2":
+                    this.cart.listCart();
+                    this.employeeMenu();
+                    break;
+                case "3":
+                    this.cart.checkout(this);
+                    this.employeeMenu();
+                    break;
+                case "4":
+                    this.currentEmployee = null;
+                    mainMenu();
+                    break;
+                default:
+                    this.employeeMenu();
+            }
+        });
+    }
 }
 
 class Cart {
@@ -113,7 +185,11 @@ class Cart {
                 total += product.price * quantity;
             }
         });
-        store.sales.push({ employee: currentEmployee.name, items: this.items, total });
+        store.sales.push({ 
+            employee: store.currentEmployee.name, 
+            items: this.items, 
+            total 
+        });
         store.saveProducts();
         store.saveSales();
         console.log(`\n🛒 Checkout Complete! Total: $${total}\n`);
@@ -122,9 +198,8 @@ class Cart {
 }
 
 const employeeManager = new EmployeeManager();
-const store = new Store();
 const cart = new Cart();
-let currentEmployee = null;
+const store = new Store(employeeManager, cart);
 
 function mainMenu() {
     console.log("\n=== Main Menu ===");
@@ -150,17 +225,17 @@ function mainMenu() {
                 mainMenu();
                 break;
             case "3":
-                selectEmployee();
+                store.selectEmployee();
                 break;
             case "4":
-                addProduct();
+                store.addProduct();
                 break;
             case "5":
                 store.listProducts();
                 mainMenu();
                 break;
             case "6":
-                showSalesReport();
+                store.showSalesReport();
                 break;
             case "7":
                 console.log("Exiting program.");
@@ -168,72 +243,6 @@ function mainMenu() {
                 break;
             default:
                 mainMenu();
-        }
-    });
-}
-
-function addProduct() {
-    rl.question("Enter product brand: ", function (brand) {
-        rl.question("Enter product model: ", function (model) {
-            rl.question("Enter price: ", function (price) {
-                rl.question("Enter stock quantity: ", function (stock) {
-                    const newProduct = { brand, model, price: parseFloat(price), stock: parseInt(stock) };
-                    store.products.push(newProduct);
-                    store.saveProducts();
-                    console.log("\n✅ Product added successfully!\n");
-                    mainMenu();
-                });
-            });
-        });
-    });
-}
-
-function selectEmployee() {
-    employeeManager.listEmployees();
-    rl.question("Select Employee Number: ", function (index) {
-        currentEmployee = employeeManager.employees[parseInt(index) - 1];
-        console.log(`\n👤 Logged in as: ${currentEmployee.name}\n`);
-        employeeMenu();
-    });
-}
-
-function showSalesReport() {
-    console.log("\n=== Sales Report ===");
-    console.log(JSON.stringify(store.sales, null, 2));
-    mainMenu();
-}
-
-function employeeMenu() {
-    console.log("\n=== Employee Menu ===");
-    console.log("1. Add to Cart");
-    console.log("2. List Cart");
-    console.log("3. Checkout");
-    console.log("4. Logout");
-    rl.question("Choose an option: ", function (choice) {
-        switch (choice) {
-            case "1":
-                store.listProducts();
-            rl.question("Select product number: ", function(index) {
-                rl.question("Enter quantity: ", function(quantity) {
-                    cart.addToCart(store.products[parseInt(index) - 1], parseInt(quantity));
-                    employeeMenu();
-                });
-            });
-                break;
-            case "2":
-                cart.listCart();
-                employeeMenu();
-                break;
-            case "3":
-                cart.checkout(store);
-                employeeMenu();
-                break;
-            case "4":
-                currentEmployee = null;
-                mainMenu();
-                break;
-            default:
-                employeeMenu();
         }
     });
 }

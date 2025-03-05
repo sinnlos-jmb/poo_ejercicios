@@ -175,5 +175,41 @@
       }
     ],
     "total": 2158
+  },
+  {
+    "employee": "fernanda",
+    "items": [
+      {
+        "product": {
+          "name": "shirt",
+          "brand": "polo",
+          "model": "cool",
+          "price": 322,
+          "stock": 2203
+        },
+        "quantity": 2
+      },
+      {
+        "product": {
+          "name": "zapatilla",
+          "brand": "nike",
+          "model": "jordan",
+          "price": 333,
+          "stock": 2181
+        },
+        "quantity": 4
+      },
+      {
+        "product": {
+          "category": "1",
+          "brand": "puma",
+          "model": "borusia",
+          "price": 233,
+          "stock": 3219
+        },
+        "quantity": 3
+      }
+    ],
+    "total": 2675
   }
 ]
