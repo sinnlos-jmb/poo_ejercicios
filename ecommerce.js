@@ -6,17 +6,17 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// Base Product class (atributo tipo en vez de subclases?)
-class Product {
-    constructor(brand, model, price, stock) {
-        this.brand = brand;
-        this.model = model;
-        this.price = price;
+
+class Producto {
+    constructor(marca, modelo, precio, stock) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.precio = precio;
         this.stock = stock;
     }
 
     getDetails() {
-        return `${this.brand} ${this.model}`;
+        return `${this.marca} ${this.modelo}`;
     }
 
     // Static method to reconstruct the correct product type
@@ -24,20 +24,20 @@ class Product {
         // Determine the product type based on additional properties
         if (productData.warrantyYears !== undefined) {
             return Object.assign(new Electronics(), productData);
-        } else if (productData.size !== undefined) {
+        } else if (productData.talle !== undefined) {
             return Object.assign(new Clothing(), productData);
         } else if (productData.dimensions !== undefined) {
             return Object.assign(new Furniture(), productData);
         }
         // Default to base Product if no specific type is found
-        return Object.assign(new Product(), productData);
+        return Object.assign(new Producto(), productData);
     }
 }
 
-// Subclasses of Product
-class Electronics extends Product {
-    constructor(brand, model, price, stock, warrantyYears) {
-        super(brand, model, price, stock);
+// Subclasses de Producto
+class Electronics extends Producto {
+    constructor(marca, modelo, precio, stock, warrantyYears) {
+        super(marca, modelo, precio, stock);
         this.warrantyYears = warrantyYears;
         this.category = 'Electronics';
     }
@@ -47,22 +47,22 @@ class Electronics extends Product {
     }
 }
 
-class Clothing extends Product {
-    constructor(brand, model, price, stock, size, material) {
-        super(brand, model, price, stock);
-        this.size = size;
+class Clothing extends Producto {
+    constructor(marca, modelo, precio, stock, talle, material) {
+        super(marca, modelo, precio, stock);
+        this.talle = talle;
         this.material = material;
         this.category = 'Clothing';
     }
 
     getDetails() {
-        return `${super.getDetails()} (${this.category}) - Size: ${this.size}, Material: ${this.material}`;
+        return `${super.getDetails()} (${this.category}) - talle: ${this.talle}, Material: ${this.material}`;
     }
 }
 
-class Furniture extends Product {
-    constructor(brand, model, price, stock, dimensions, color) {
-        super(brand, model, price, stock);
+class Furniture extends Producto {
+    constructor(marca, modelo, precio, stock, dimensions, color) {
+        super(marca, modelo, precio, stock);
         this.dimensions = dimensions;
         this.color = color;
         this.category = 'Furniture';
@@ -73,40 +73,40 @@ class Furniture extends Product {
     }
 }
 
-class Employee {
-    constructor(name, role) {
-        this.name = name;
-        this.role = role;
+class Empleado {
+    constructor(nombre, rol) {
+        this.nombre = nombre;
+        this.rol = rol;
     }
 }
 
 class EmployeeManager {
     constructor() {
-        this.employees = this.loadEmployees();
+        this.empleados = this.cargarEmpleados();
     }
 
-    loadEmployees() {
+    cargarEmpleados() {
         try {
-            return JSON.parse(fs.readFileSync("employees.json"));
+            return JSON.parse(fs.readFileSync("empleados.json"));
         } catch (error) {
             return [];
         }
     }
 
-    saveEmployees() {
-        fs.writeFileSync("employees.json", JSON.stringify(this.employees, null, 2));
+    guardarEmpleados() {
+        fs.writeFileSync("empleados.json", JSON.stringify(this.empleados, null, 2));
     }
 
-    addEmployee(emp) {
-        this.employees.push(emp);
-        this.saveEmployees();
-        console.log("\n✅ Employee added!\n");
+    agregarEmpleado(emp) {
+        this.empleados.push(emp);
+        this.guardarEmpleados();
+        console.log("\n✅ Empleado agregado!\n");
     }
 
-    listEmployees() {
-        console.log("\n=== Employee List ===");
-        this.employees.forEach((employee, index) => {
-            console.log(`${index + 1}. ${employee.name} - ${employee.role}`);
+    mostrarEmpleados() {
+        console.log("\n=== Empleados ===");
+        this.empleados.forEach((empleado, index) => {
+            console.log(`${index + 1}. ${empleado.nombre} - ${empleado.rol}`);
         });
     }
 }
@@ -116,45 +116,45 @@ class Cart {
         this.items = [];
     }
 
-    addToCart(product, quantity) {
-        this.items.push({ product, quantity });
-        console.log("\n✅ Product added to cart!\n");
+    addToCart(producto, cantidad) {
+        this.items.push({ producto, cantidad });
+        console.log("\n✅ Producto agregado al carro!\n");
     }
 
     listCart() {
-        console.log("\n=== Cart Contents ===");
+        console.log("\n=== Contenido del carro de compras ===");
         this.items.forEach((item, index) => {
-            console.log(`${index + 1}. ${item.product.getDetails()} - Quantity: ${item.quantity}`);
+            console.log(`${index + 1}. ${item.producto.getDetails()} - Cantidad: ${item.cantidad}`);
         });
     }
 
-    checkout(store) {
+    checkout(tienda) {
         let total = 0;
-        this.items.forEach(({ product, quantity }) => {
-            let productIndex = store.products.findIndex(p => 
-                p.brand === product.brand && 
-                p.model === product.model
+        this.items.forEach(({ producto, cantidad }) => {
+            let productIndex = tienda.productos.findIndex(p => 
+                p.marca === producto.marca && 
+                p.modelo === producto.modelo
             );
-            if (productIndex !== -1 && store.products[productIndex].stock >= quantity) {
-                store.products[productIndex].stock -= quantity;
-                total += product.price * quantity;
+            if (productIndex !== -1 && tienda.productos[productIndex].stock >= cantidad) {
+                tienda.productos[productIndex].stock -= cantidad;
+                total += producto.precio * cantidad;
             }
         });
-        store.sales.push({ 
-            employee: store.currentEmployee.name, 
+        tienda.sales.push({ 
+            empleado: tienda.currentEmployee.nombre, 
             items: this.items, 
             total 
         });
-        store.saveProducts();
-        store.saveSales();
-        console.log(`\n🛒 Checkout Complete! Total: $${total}\n`);
+        tienda.guardarProductos();
+        tienda.saveSales();
+        console.log(`\n🛒 Checkout Realizado! Total: $${total}\n`);
         this.items = [];
     }
 }
 
-class Store {
+class Tienda {
     constructor(employeeManager, cart) {
-        this.products = this.loadProducts();
+        this.productos = this.cargarProductos();
         this.sales = this.loadSales();
         this.employeeManager = employeeManager;
         this.cart = cart;
@@ -162,24 +162,24 @@ class Store {
         
         // Available product types
         this.productTypes = [
-            { name: 'Electronics', class: Electronics },
-            { name: 'Clothing', class: Clothing },
-            { name: 'Furniture', class: Furniture }
+            { nombre: 'Electronics', class: Electronics },
+            { nombre: 'Clothing', class: Clothing },
+            { nombre: 'Furniture', class: Furniture }
         ];
     }
 
-    loadProducts() {
+    cargarProductos() {
         try {
             // Parse JSON and reconstruct each product to its correct type
-            const rawProducts = JSON.parse(fs.readFileSync("products.json"));
-            return rawProducts.map(productData => Product.reconstruct(productData));
+            const rawProducts = JSON.parse(fs.readFileSync("productos.json"));
+            return rawProducts.map(productData => Producto.reconstruct(productData));
         } catch (error) {
             return [];
         }
     }
 
-    saveProducts() {
-        fs.writeFileSync("products.json", JSON.stringify(this.products, null, 2));
+    guardarProductos() {
+        fs.writeFileSync("productos.json", JSON.stringify(this.productos, null, 2));
     }
 
     loadSales() {
@@ -194,36 +194,36 @@ class Store {
         fs.writeFileSync("sales.json", JSON.stringify(this.sales, null, 2));
     }
 
-    listProducts() {
-        console.log("\n=== Product List ===");
-        this.products.forEach((product, index) => {
-            console.log(`${index + 1}. ${product.getDetails()} - $${product.price} (Stock: ${product.stock})`);
+    mostrarProductos() {
+        console.log("\n=== Productos ===");
+        this.productos.forEach((producto, index) => {
+            console.log(`${index + 1}. ${producto.getDetails()} - $${producto.precio} (Stock: ${producto.stock})`);
         });
     }
 
-    addProduct() {
+    agregarProducto() {
         // List available product types
-        console.log("\n=== Select Product Type ===");
+        console.log("\n=== Seleccionar tipo de producto ===");
         this.productTypes.forEach((type, index) => {
-            console.log(`${index + 1}. ${type.name}`);
+            console.log(`${index + 1}. ${type.nombre}`);
         });
 
-        rl.question("Choose Product Type: ", (typeChoice) => {
+        rl.question("Seleccionar tipo de producto: ", (typeChoice) => {
             const selectedType = this.productTypes[parseInt(typeChoice) - 1];
             
             if (!selectedType) {
-                console.log("Invalid product type selected.");
+                console.log("Tipo de producto seleccionado es invalido.");
                 mainMenu();
                 return;
             }
 
             // Common product details... preguntar primero type
-            rl.question("Enter product brand: ", (brand) => {
-                rl.question("Enter product model: ", (model) => {
-                    rl.question("Enter price: ", (price) => {
-                        rl.question("Enter stock quantity: ", (stock) => {
+            rl.question("Ingrese marca del producto: ", (marca) => {
+                rl.question("Ingrese modelo del producto: ", (modelo) => {
+                    rl.question("Ingrese precio: ", (precio) => {
+                        rl.question("Enter stock cantidad: ", (stock) => {
                             // Additional details based on product type
-                            this.addProductByType(selectedType, brand, model, price, stock);
+                            this.addProductByType(selectedType, marca, modelo, precio, stock);
                         });
                     });
                 });
@@ -231,80 +231,80 @@ class Store {
         });
     }
 
-    addProductByType(selectedType, brand, model, price, stock) {
-        switch(selectedType.name) {
+    addProductByType(selectedType, marca, modelo, precio, stock) {
+        switch(selectedType.nombre) {
             case 'Electronics':
                 rl.question("Enter warranty years: ", (warrantyYears) => {
-                    const newProduct = new selectedType.class(
-                        brand, 
-                        model, 
-                        parseFloat(price), 
+                    const nuevoProducto = new selectedType.class(
+                        marca, 
+                        modelo, 
+                        parseFloat(precio), 
                         parseInt(stock),
                         parseInt(warrantyYears)
                     );
-                    this.saveNewProduct(newProduct);
+                    this.saveNewProduct(nuevoProducto);
                 });
                 break;
             
             case 'Clothing':
-                rl.question("Enter size: ", (size) => {
-                    rl.question("Enter material: ", (material) => {
-                        const newProduct = new selectedType.class(
-                            brand, 
-                            model, 
-                            parseFloat(price), 
+                rl.question("Ingresar talle: ", (talle) => {
+                    rl.question("Ingresar material: ", (material) => {
+                        const nuevoProducto = new selectedType.class(
+                            marca, 
+                            modelo, 
+                            parseFloat(precio), 
                             parseInt(stock),
-                            size,
+                            talle,
                             material
                         );
-                        this.saveNewProduct(newProduct);
+                        this.saveNewProduct(nuevoProducto);
                     });
                 });
                 break;
             
             case 'Furniture':
-                rl.question("Enter dimensions: ", (dimensions) => {
-                    rl.question("Enter color: ", (color) => {
-                        const newProduct = new selectedType.class(
-                            brand, 
-                            model, 
-                            parseFloat(price), 
+                rl.question("Ingresar dimensiones: ", (dimensions) => {
+                    rl.question("Ingresar color: ", (color) => {
+                        const nuevoProducto = new selectedType.class(
+                            marca, 
+                            modelo, 
+                            parseFloat(precio), 
                             parseInt(stock),
                             dimensions,
                             color
                         );
-                        this.saveNewProduct(newProduct);
+                        this.saveNewProduct(nuevoProducto);
                     });
                 });
                 break;
         }
     }
 
-    saveNewProduct(newProduct) {
-        this.products.push(newProduct);
-        this.saveProducts();
-        console.log("\n✅ Product added successfully!");
-        console.log(`Details: ${newProduct.getDetails()}\n`);
+    saveNewProduct(nuevoProducto) {
+        this.productos.push(nuevoProducto);
+        this.guardarProductos();
+        console.log("\n✅ Producto agregado exitosamente!");
+        console.log(`Detalles: ${nuevoProducto.getDetails()}\n`);
         mainMenu();
     }
 
-    selectEmployee() {
-        this.employeeManager.listEmployees();
-        rl.question("Select Employee Number: ", (index) => {
-            this.currentEmployee = this.employeeManager.employees[parseInt(index) - 1];
-            console.log(`\n👤 Logged in as: ${this.currentEmployee.name}\n`);
-            this.employeeMenu();
+    seleccionarEmpleado() {
+        this.employeeManager.mostrarEmpleados();
+        rl.question("Seleccionar nro de empleado: ", (index) => {
+            this.currentEmployee = this.employeeManager.empleados[parseInt(index) - 1];
+            console.log(`\n👤 Logged in as: ${this.currentEmployee.nombre}\n`);
+            this.menuEmpleados();
         });
     }
 
-    showSalesReport() {
+    mostrarReporte() {
         console.log("\n=== Sales Report ===");
         console.log(JSON.stringify(this.sales, null, 2));
         mainMenu();
     }
 
-    employeeMenu() {
-        console.log("\n=== Employee Menu ===");
+    menuEmpleados() {
+        console.log("\n=== Operaciones ===");
         console.log("1. Add to Cart");
         console.log("2. List Cart");
         console.log("3. Checkout");
@@ -313,31 +313,31 @@ class Store {
         rl.question("Choose an option: ", (choice) => {
             switch (choice) {
                 case "1":
-                    this.listProducts();
-                    rl.question("Select product number: ", (index) => {
-                        rl.question("Enter quantity: ", (quantity) => {
+                    this.mostrarProductos();
+                    rl.question("Seleccione numero de producto: ", (index) => {
+                        rl.question("Ingrese cantidad: ", (cantidad) => {
                             this.cart.addToCart(
-                                this.products[parseInt(index) - 1], 
-                                parseInt(quantity)
+                                this.productos[parseInt(index) - 1], 
+                                parseInt(cantidad)
                             );
-                            this.employeeMenu();
+                            this.menuEmpleados();
                         });
                     });
                     break;
                 case "2":
                     this.cart.listCart();
-                    this.employeeMenu();
+                    this.menuEmpleados();
                     break;
                 case "3":
                     this.cart.checkout(this);
-                    this.employeeMenu();
+                    this.menuEmpleados();
                     break;
                 case "4":
                     this.currentEmployee = null;
                     mainMenu();
                     break;
                 default:
-                    this.employeeMenu();
+                    this.menuEmpleados();
             }
         });
     }
@@ -345,43 +345,43 @@ class Store {
 
 const employeeManager = new EmployeeManager();
 const cart = new Cart();
-const store = new Store(employeeManager, cart);
+const tienda = new Tienda(employeeManager, cart);
 
 function mainMenu() {
     console.log("\n=== Main Menu ===");
-    console.log("1. Add Employee");
-    console.log("2. List Employees");
-    console.log("3. Select Employee");
-    console.log("4. Add Product");
-    console.log("5. List Products");
-    console.log("6. Show Sales Report");
-    console.log("7. Exit");
-    rl.question("Choose an option: ", function (choice) {
+    console.log("1. Nuevo empleado");
+    console.log("2. Lista de empleados");
+    console.log("3. Seleccionar empleado");
+    console.log("4. Nuevo Producto");
+    console.log("5. Lista de productos");
+    console.log("6. Reporte de ventas");
+    console.log("7. Salir");
+    rl.question("Seleccione una opcion: ", function (choice) {
         switch (choice) {
             case "1":
-                rl.question("Enter Employee Name: ", function(name) {
-                    rl.question("Enter Role: ", function(role) {
-                        employeeManager.addEmployee(new Employee(name, role));
+                rl.question("Ingrese nombre del empleado: ", function(nombre) {
+                    rl.question("Ingrese funcion: ", function(rol) {
+                        employeeManager.agregarEmpleado(new Empleado(nombre, rol));
                         mainMenu();
                     });
                 });
                 break;
             case "2":
-                employeeManager.listEmployees();
+                employeeManager.mostrarEmpleados();
                 mainMenu();
                 break;
             case "3":
-                store.selectEmployee();
+                tienda.seleccionarEmpleado();
                 break;
             case "4":
-                store.addProduct();
+                tienda.agregarProducto();
                 break;
             case "5":
-                store.listProducts();
+                tienda.mostrarProductos();
                 mainMenu();
                 break;
             case "6":
-                store.showSalesReport();
+                tienda.mostrarReporte();
                 break;
             case "7":
                 console.log("Exiting program.");

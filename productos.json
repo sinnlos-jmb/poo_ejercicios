@@ -1,0 +1,11 @@
+[
+  {
+    "marca": "nike",
+    "modelo": "air jordan",
+    "precio": 333,
+    "stock": 3220,
+    "talle": "22",
+    "material": "cuero",
+    "category": "Clothing"
+  }
+]
