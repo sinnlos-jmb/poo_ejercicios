@@ -2,5 +2,13 @@
   {
     "nombre": "Romedal",
     "rol": "cajero"
+  },
+  {
+    "nombre": "fermin rodriguez",
+    "rol": "repositor"
+  },
+  {
+    "nombre": "fabricio",
+    "rol": "cajero"
   }
 ]

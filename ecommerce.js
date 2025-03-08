@@ -13,6 +13,7 @@ class Producto {
         this.modelo = modelo;
         this.precio = precio;
         this.stock = stock;
+        this.tipo = "";
     }
 
     getDetails() {
@@ -80,7 +81,7 @@ class Empleado {
     }
 }
 
-class EmployeeManager {
+class AdminEmpleados {
     constructor() {
         this.empleados = this.cargarEmpleados();
     }
@@ -97,7 +98,7 @@ class EmployeeManager {
         fs.writeFileSync("empleados.json", JSON.stringify(this.empleados, null, 2));
     }
 
-    agregarEmpleado(emp) {
+    addEmpleado(emp) {
         this.empleados.push(emp);
         this.guardarEmpleados();
         console.log("\n✅ Empleado agregado!\n");
@@ -111,17 +112,17 @@ class EmployeeManager {
     }
 }
 
-class Cart {
+class Carro {
     constructor() {
         this.items = [];
     }
 
-    addToCart(producto, cantidad) {
+    agregarItem(producto, cantidad) {
         this.items.push({ producto, cantidad });
         console.log("\n✅ Producto agregado al carro!\n");
     }
 
-    listCart() {
+    mostrarCarro() {
         console.log("\n=== Contenido del carro de compras ===");
         this.items.forEach((item, index) => {
             console.log(`${index + 1}. ${item.producto.getDetails()} - Cantidad: ${item.cantidad}`);
@@ -141,7 +142,7 @@ class Cart {
             }
         });
         tienda.sales.push({ 
-            empleado: tienda.currentEmployee.nombre, 
+            empleado: tienda.empleadoActivo.nombre, 
             items: this.items, 
             total 
         });
@@ -153,12 +154,12 @@ class Cart {
 }
 
 class Tienda {
-    constructor(employeeManager, cart) {
+    constructor(adminEmpleados, carro) {
         this.productos = this.cargarProductos();
         this.sales = this.loadSales();
-        this.employeeManager = employeeManager;
-        this.cart = cart;
-        this.currentEmployee = null;
+        this.adminEmpleados = adminEmpleados;
+        this.carro = carro;
+        this.empleadoActivo = null;
         
         // Available product types
         this.productTypes = [
@@ -184,14 +185,14 @@ class Tienda {
 
     loadSales() {
         try {
-            return JSON.parse(fs.readFileSync("sales.json"));
+            return JSON.parse(fs.readFileSync("reporte_ventas.json"));
         } catch (error) {
             return [];
         }
     }
 
     saveSales() {
-        fs.writeFileSync("sales.json", JSON.stringify(this.sales, null, 2));
+        fs.writeFileSync("reporte_ventas.json", JSON.stringify(this.sales, null, 2));
     }
 
     mostrarProductos() {
@@ -234,7 +235,7 @@ class Tienda {
     addProductByType(selectedType, marca, modelo, precio, stock) {
         switch(selectedType.nombre) {
             case 'Electronics':
-                rl.question("Enter warranty years: ", (warrantyYears) => {
+                rl.question("Ingresar años de garantia: ", (warrantyYears) => {
                     const nuevoProducto = new selectedType.class(
                         marca, 
                         modelo, 
@@ -242,7 +243,7 @@ class Tienda {
                         parseInt(stock),
                         parseInt(warrantyYears)
                     );
-                    this.saveNewProduct(nuevoProducto);
+                    this.almacenarProducto(nuevoProducto);
                 });
                 break;
             
@@ -257,7 +258,7 @@ class Tienda {
                             talle,
                             material
                         );
-                        this.saveNewProduct(nuevoProducto);
+                        this.almacenarProducto(nuevoProducto);
                     });
                 });
                 break;
@@ -273,14 +274,14 @@ class Tienda {
                             dimensions,
                             color
                         );
-                        this.saveNewProduct(nuevoProducto);
+                        this.almacenarProducto(nuevoProducto);
                     });
                 });
                 break;
         }
     }
 
-    saveNewProduct(nuevoProducto) {
+    almacenarProducto(nuevoProducto) {
         this.productos.push(nuevoProducto);
         this.guardarProductos();
         console.log("\n✅ Producto agregado exitosamente!");
@@ -289,69 +290,69 @@ class Tienda {
     }
 
     seleccionarEmpleado() {
-        this.employeeManager.mostrarEmpleados();
+        this.adminEmpleados.mostrarEmpleados();
         rl.question("Seleccionar nro de empleado: ", (index) => {
-            this.currentEmployee = this.employeeManager.empleados[parseInt(index) - 1];
-            console.log(`\n👤 Logged in as: ${this.currentEmployee.nombre}\n`);
-            this.menuEmpleados();
+            this.empleadoActivo = this.adminEmpleados.empleados[parseInt(index) - 1];
+            console.log(`\n👤 Logged in as: ${this.empleadoActivo.nombre}\n`);
+            this.menuOperaciones();
         });
     }
 
     mostrarReporte() {
-        console.log("\n=== Sales Report ===");
+        console.log("\n=== Reporte ===");
         console.log(JSON.stringify(this.sales, null, 2));
         mainMenu();
     }
 
-    menuEmpleados() {
+    menuOperaciones() {
         console.log("\n=== Operaciones ===");
-        console.log("1. Add to Cart");
-        console.log("2. List Cart");
+        console.log("1. Agregar al carro");
+        console.log("2. Mostrar contenido del carro");
         console.log("3. Checkout");
         console.log("4. Logout");
         
-        rl.question("Choose an option: ", (choice) => {
-            switch (choice) {
+        rl.question("Seleccionar una opcion: ", (opc) => {
+            switch (opc) {
                 case "1":
                     this.mostrarProductos();
                     rl.question("Seleccione numero de producto: ", (index) => {
                         rl.question("Ingrese cantidad: ", (cantidad) => {
-                            this.cart.addToCart(
+                            this.carro.agregarItem(
                                 this.productos[parseInt(index) - 1], 
                                 parseInt(cantidad)
                             );
-                            this.menuEmpleados();
+                            this.menuOperaciones();
                         });
                     });
                     break;
                 case "2":
-                    this.cart.listCart();
-                    this.menuEmpleados();
+                    this.carro.mostrarCarro();
+                    this.menuOperaciones();
                     break;
                 case "3":
-                    this.cart.checkout(this);
-                    this.menuEmpleados();
+                    this.carro.checkout(this);
+                    this.menuOperaciones();
                     break;
                 case "4":
-                    this.currentEmployee = null;
+                    this.empleadoActivo = null;
                     mainMenu();
                     break;
                 default:
-                    this.menuEmpleados();
+                    this.menuOperaciones();
             }
         });
     }
 }
 
-const employeeManager = new EmployeeManager();
-const cart = new Cart();
-const tienda = new Tienda(employeeManager, cart);
+const adminEmpleados = new AdminEmpleados();
+const carro = new Carro();
+const tienda = new Tienda(adminEmpleados, carro);
 
 function mainMenu() {
     console.log("\n=== Main Menu ===");
     console.log("1. Nuevo empleado");
     console.log("2. Lista de empleados");
-    console.log("3. Seleccionar empleado");
+    console.log("3. Cargar nuevas ventas");
     console.log("4. Nuevo Producto");
     console.log("5. Lista de productos");
     console.log("6. Reporte de ventas");
@@ -361,13 +362,13 @@ function mainMenu() {
             case "1":
                 rl.question("Ingrese nombre del empleado: ", function(nombre) {
                     rl.question("Ingrese funcion: ", function(rol) {
-                        employeeManager.agregarEmpleado(new Empleado(nombre, rol));
+                        adminEmpleados.addEmpleado(new Empleado(nombre, rol));
                         mainMenu();
                     });
                 });
                 break;
             case "2":
-                employeeManager.mostrarEmpleados();
+                adminEmpleados.mostrarEmpleados();
                 mainMenu();
                 break;
             case "3":
