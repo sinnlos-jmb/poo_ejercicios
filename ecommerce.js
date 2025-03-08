@@ -88,14 +88,14 @@ class AdminEmpleados {
 
     cargarEmpleados() {
         try {
-            return JSON.parse(fs.readFileSync("empleados.json"));
+            return JSON.parse(fs.readFileSync("./data/empleados.json"));
         } catch (error) {
             return [];
         }
     }
 
     guardarEmpleados() {
-        fs.writeFileSync("empleados.json", JSON.stringify(this.empleados, null, 2));
+        fs.writeFileSync("./data/empleados.json", JSON.stringify(this.empleados, null, 2));
     }
 
     addEmpleado(emp) {
@@ -172,7 +172,7 @@ class Tienda {
     cargarProductos() {
         try {
             // Parse JSON and reconstruct each product to its correct type
-            const rawProducts = JSON.parse(fs.readFileSync("productos.json"));
+            const rawProducts = JSON.parse(fs.readFileSync("./data/productos.json"));
             return rawProducts.map(productData => Producto.reconstruct(productData));
         } catch (error) {
             return [];
@@ -180,19 +180,19 @@ class Tienda {
     }
 
     guardarProductos() {
-        fs.writeFileSync("productos.json", JSON.stringify(this.productos, null, 2));
+        fs.writeFileSync("./data/productos.json", JSON.stringify(this.productos, null, 2));
     }
 
     loadSales() {
         try {
-            return JSON.parse(fs.readFileSync("reporte_ventas.json"));
+            return JSON.parse(fs.readFileSync("./data/reporte_ventas.json"));
         } catch (error) {
             return [];
         }
     }
 
     saveSales() {
-        fs.writeFileSync("reporte_ventas.json", JSON.stringify(this.sales, null, 2));
+        fs.writeFileSync("./data/reporte_ventas.json", JSON.stringify(this.sales, null, 2));
     }
 
     mostrarProductos() {
