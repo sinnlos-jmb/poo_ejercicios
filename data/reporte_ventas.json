@@ -43,5 +43,37 @@
       }
     ],
     "total": 11329
+  },
+  {
+    "empleado": "Romedal",
+    "items": [
+      {
+        "producto": {
+          "marca": "levis",
+          "modelo": "505",
+          "precio": 3333,
+          "stock": 2108,
+          "tipo": "",
+          "ancho": "30-50",
+          "largo": "32-44",
+          "category": "Pantalon"
+        },
+        "cantidad": 3
+      },
+      {
+        "producto": {
+          "marca": "reebock",
+          "modelo": "running",
+          "precio": 332,
+          "stock": 2218,
+          "tipo": "",
+          "talle": "11",
+          "material": "leather",
+          "category": "Clothing"
+        },
+        "cantidad": 2
+      }
+    ],
+    "total": 10663
   }
 ]
