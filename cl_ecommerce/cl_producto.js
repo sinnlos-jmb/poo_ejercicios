@@ -32,6 +32,13 @@ class Producto {
     getDetalles() {
         return `${this.marca} ${this.modelo}`;
     }
+
+    mostrarProductos(p_vec_prds) {
+        console.log("\n=== Productos ===");
+        p_vec_prds.forEach((producto, index) => {
+            console.log(`${index + 1}. ${producto.getDetalles()} - $${producto.precio} (Stock: ${producto.stock})`);
+        });
+    }
     
     cargarProductos() {
         try {
@@ -45,7 +52,7 @@ class Producto {
                 temp.push(Producto.reconstruct(rawProducts[i]));
                 }
 
-            console.log("mapped: "+temp);
+            //console.log("mapped: "+temp);
             return temp;
         } catch (error) {
             return [];
@@ -59,7 +66,7 @@ class Producto {
 
     // Static method to reconstruct the correct product type
     static reconstruct(productData) {
-        console.log("entro a reconstruct!");
+        //console.log("entro a reconstruct!");
         // Determine the product type based on additional properties
         if (productData.ancho !== undefined) {
             return Object.assign(new Pantalon(), productData);

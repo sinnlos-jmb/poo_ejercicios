@@ -34,7 +34,6 @@ class Carro {
             items: this.items, 
             total 
         });
-        cl_prd.Producto.guardarProductos(p_Tienda.productos);
         p_Tienda.saveSales();
         console.log(`\nCheckout Realizado! Total: $${total}\n`);
         this.items = [];

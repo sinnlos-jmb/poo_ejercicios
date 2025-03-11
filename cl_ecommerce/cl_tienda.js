@@ -2,14 +2,11 @@ const fs = require("fs");
 const path = require('path');
 
 const cl_prd = require("./cl_producto");
+const cl_menu = require("./cl_menu");
+const cl_carro = require("./cl_carro");
 
 const prd=new cl_prd.Producto();
-
 const readline2 = require("readline");
-const rl1 = readline2.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
 
 
 class Tienda {
@@ -18,23 +15,19 @@ class Tienda {
     static registro_ventas=[];
     static empleadoActivo;
     static adminEmpleados;
-    static carro;
-    static Menu;
-    constructor(adminEmpleados, carro, p_menu) {
+    static carro= new cl_carro.Carro();
+    constructor(adminEmpleados, carro) {
         Tienda.productos = prd.cargarProductos();
         console.log("cargo prds de json: "+Tienda.productos);
         Tienda.registro_ventas = this.loadSales();
         Tienda.adminEmpleados = adminEmpleados;
         Tienda.carro = carro;
         Tienda.empleadoActivo = null;
-        Tienda.Menu=p_menu;
-        
+        //this.mn=new cl_menu.Menu();
+        //console.log("constructor de tienda, carga menu? "+this.mn.msg);
 
     }
 
-    static setMenu(p_menu) {
-     Tienda.Menu=p_menu;
-    }
 
     loadSales() {
         try {
@@ -56,7 +49,8 @@ class Tienda {
     }
 
 
-    static addProductByType(selectedType, marca, modelo, precio, stock, p_menu) {
+    static addProductByType(selectedType, marca, modelo, precio, stock, rl1, menu) {
+
         switch(selectedType.nombre) {
             case 'Pantalon':
                 rl1.question("ancho: ", (ancho) => {
@@ -69,7 +63,7 @@ class Tienda {
                         ancho,
                         largo
                     );
-                    Tienda.almacenarProducto(nuevoProducto, p_menu);
+                    Tienda.almacenarProducto(nuevoProducto, menu);
                 });
             });
             break;
@@ -85,7 +79,7 @@ class Tienda {
                             talles,
                             material
                         );
-                        Tienda.almacenarProducto(nuevoProducto, p_menu);
+                        Tienda.almacenarProducto(nuevoProducto, menu);
                     });
                 });
                 break;
@@ -103,30 +97,30 @@ class Tienda {
                             talles,
                             color
                         );
-                        Tienda.almacenarProducto(nuevoProducto, p_menu);
+                        Tienda.almacenarProducto(nuevoProducto, menu);
                         
                     });
                 });
             });
-                break;
+            break;
         }
         
     }
 
-    static almacenarProducto(nuevoProducto, p_menu) {
-        Tienda.productos.push(nuevoProducto);
-        cl_prd.Producto.guardarProductos(Tienda.productos);
+    static almacenarProducto(nuevoProducto, menu) {
+        menu.vec_prds.push(nuevoProducto);
+        cl_prd.Producto.guardarProductos(menu.vec_prds);
         console.log("\n✅ Producto agregado exitosamente!");
         console.log(`Detalles: ${nuevoProducto.getDetalles()}\n`);
-        Tienda.Menu.menuPrincipal();
+        menu.menuPrincipal();
     }
 
-    static seleccionarEmpleado(p_menu) {
-        Tienda.adminEmpleados.mostrarEmpleados();
+    static seleccionarEmpleado(rl1, mn, adminEmps) {
+        adminEmps.mostrarEmpleados();
         rl1.question("Seleccionar nro de empleado: ", (index) => {
-            Tienda.empleadoActivo = this.adminEmpleados.empleados[parseInt(index) - 1];
+            Tienda.empleadoActivo = adminEmps.empleados[parseInt(index) - 1];
             console.log(`\n Empleado a cargo: ${Tienda.empleadoActivo.nombre}\n`);
-            Tienda.menuOperaciones(p_menu);
+            Tienda.menuOperaciones(rl1, mn);
         });
     }
 
@@ -135,8 +129,7 @@ class Tienda {
         console.log(JSON.stringify(Tienda.registro_ventas, null, 2));
     }
 
-    static menuOperaciones(p_menu) {
-        //Tienda.Menu.menuPrincipal();
+    static menuOperaciones(rl1, mn) {
         console.log("\n=== Operaciones ===");
         console.log("1. Agregar al carro");
         console.log("2. Mostrar contenido del carro");
@@ -147,34 +140,37 @@ class Tienda {
             //console.log("menu: "+p_menu.menuPrincipal());
             switch (opc) {
                 case "1":
-                    Tienda.mostrarProductos();
+                    prd.mostrarProductos(mn.vec_prds);
                     rl1.question("Seleccione numero de producto: ", (index) => {
                         rl1.question("Ingrese cantidad: ", (cantidad) => {
                             Tienda.carro.agregarItem(
-                                Tienda.productos[parseInt(index) - 1], 
+                                mn.vec_prds[parseInt(index) - 1], 
                                 parseInt(cantidad)
                             );
-                            Tienda.menuOperaciones();
+                            Tienda.menuOperaciones(rl1, mn);
                         });
                     });
+
                     break;
                 case "2":
                     Tienda.carro.mostrarCarro();
-                    Tienda.menuOperaciones();
+                    Tienda.menuOperaciones(rl1, mn);
                     break;
                 case "3":
+                    Tienda.productos=mn.vec_prds;
                     Tienda.carro.checkout(Tienda);
-                    Tienda.Menu.menuPrincipal();
+                    mn.menuPrincipal();
                     break;
                 case "4":
                     Tienda.empleadoActivo = null;
-                    Tienda.Menu.menuPrincipal();
+                    mn.menuPrincipal();
                     break;
                 default:
-                    Tienda.menuOperaciones();
+                    Tienda.menuOperaciones(rl1, mn);
             }
+
         });
     }
 }
 
-module.exports = {Tienda, rl1 }
+module.exports = {Tienda }

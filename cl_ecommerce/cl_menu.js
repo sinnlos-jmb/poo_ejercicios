@@ -4,16 +4,25 @@ const cl_empleado = require("./cl_empleado");
 const cl_carro = require("./cl_carro");
 const cl_prd = require("./cl_producto");
 
+const readline2 = require("readline");
+
 
     const adminEmpleados = new cl_empleado.AdminEmpleados();
     const carro = new cl_carro.Carro();
+    const prd=new cl_prd.Producto();
+    //const tienda = new cl_tienda.Tienda();
     //console.log("genero tienda!");
-    const tienda = new cl_tienda.Tienda(adminEmpleados, carro );
+    //const tienda = new cl_tienda.Tienda(adminEmpleados, carro );
     //console.log("datos del objeto tienda: "+tienda.productos);
 
     class Menu {
+        constructor(){
+            this.msg="menu";
+            this.vec_prds=prd.cargarProductos();
+            //console.log("cargo prds de json: "+this.vec_prds);      
+        }
 
-     static menu="\n=== Menu Principal ===   \n"+
+        static str_menu="\n=== Menu Principal ===   \n"+
                 "1. Nuevo empleado\n"+
                 "2. Lista de empleados\n"+
                 "3. Cargar nuevas ventas\n"+
@@ -21,27 +30,32 @@ const cl_prd = require("./cl_producto");
                 "5. Lista de productos\n"+
                 "6. Reporte de ventas\n"+
                 "7. Salir\n";
+            static s_rl=readline2.createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
 
-    static menuPrincipal() {
-        
-        console.log(Menu.menu);
-        cl_tienda.rl1.question("Seleccione una opcion: ", function (choice) {
-            cl_tienda.Tienda.setMenu(Menu);
+    menuPrincipal() {
+
+        console.log(Menu.str_menu);
+        Menu.s_rl.question("Seleccione una opcion: ", function (choice) {
+            const mn2=new Menu();
+            let rl2;
             switch (choice) {
                 case "1":
-                    cl_tienda.rl1.question("Ingrese nombre del empleado: ", function(nombre) {
-                        cl_tienda.rl1.question("Ingrese funcion: ", function(rol) {
+                    Menu.s_rl.question("Ingrese nombre del empleado: ", function(nombre) {
+                        Menu.s_rl.question("Ingrese funcion: ", function(rol) {
                             adminEmpleados.addEmpleado(new cl_empleado.Empleado(nombre, rol));
-                            Menu.menuPrincipal();
+                            mn2.menuPrincipal();
                         });
                     });
                     break;
                 case "2":
                     adminEmpleados.mostrarEmpleados();
-                    Menu.menuPrincipal();
+                    mn2.menuPrincipal();
                     break;
                 case "3":
-                    cl_tienda.Tienda.seleccionarEmpleado(Menu);
+                    cl_tienda.Tienda.seleccionarEmpleado(Menu.s_rl, mn2, adminEmpleados, carro);
                     break;
                 case "4":
                     console.log("\n=== Seleccionar tipo de producto ===");
@@ -49,8 +63,7 @@ const cl_prd = require("./cl_producto");
                     cl_prd.productTypes.forEach((type, index) => {
                         console.log(`${index + 1}. ${type.nombre}`);
                     });
-            
-                    cl_tienda.rl1.question("Seleccionar tipo de producto: ", (typeChoice) => {
+                    Menu.s_rl.question("Seleccionar tipo de producto: ", (typeChoice) => {
                         const selectedType = cl_prd.productTypes[parseInt(typeChoice) - 1];
                         
                         if (!selectedType) {
@@ -58,13 +71,13 @@ const cl_prd = require("./cl_producto");
                             return;
                         }
             
-                        // Common product details... preguntar primero type
-                        cl_tienda.rl1.question("Ingrese marca del producto: ", (marca) => {
-                            cl_tienda.rl1.question("Ingrese modelo del producto: ", (modelo) => {
-                                cl_tienda.rl1.question("Ingrese precio: ", (precio) => {
-                                    cl_tienda.rl1.question("Enter stock cantidad: ", (stock) => {
-                                        // Additional details based on product type
-                                        cl_tienda.Tienda.addProductByType(selectedType, marca, modelo, precio, stock, Menu);
+                        // Common product details
+                        Menu.s_rl.question("Ingrese marca del producto: ", (marca) => {
+                            Menu.s_rl.question("Ingrese modelo del producto: ", (modelo) => {
+                                Menu.s_rl.question("Ingrese precio: ", (precio) => {
+                                    Menu.s_rl.question("Enter stock cantidad: ", (stock) => {
+                                        // detalles adicionales por subproducto
+                                        cl_tienda.Tienda.addProductByType(selectedType, marca, modelo, precio, stock, Menu.s_rl, mn2);
                     
                                     });
                                 });
@@ -74,21 +87,23 @@ const cl_prd = require("./cl_producto");
                     
                     break;
                 case "5":
-                    cl_tienda.Tienda.mostrarProductos();
-                    Menu.menuPrincipal();
+                    prd.mostrarProductos(mn2.vec_prds);
+                    mn2.menuPrincipal();
                     break;
                 case "6":
                     cl_tienda.Tienda.mostrarReporte();
-                    Menu.menuPrincipal();
+                    mn2.menuPrincipal();
                     break;
                 case "7":
                     console.log("Cerrando programa.");
-                    cl_tienda.rl1.close();
+                    Menu.s_rl.close();
                     break;
                 default:
-                    Menu.menuPrincipal();
+                    mn2.menuPrincipal();
             }
+            
         });
+        
     }
 }
 

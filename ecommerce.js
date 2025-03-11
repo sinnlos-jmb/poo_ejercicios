@@ -1,8 +1,8 @@
 
-const main = require("./cl_ecommerce/Menu");
+const main = require("./cl_ecommerce/cl_menu");
+const mn=new main.Menu();
 
 
 
 
-
-main.Menu.menuPrincipal();
+mn.menuPrincipal();
