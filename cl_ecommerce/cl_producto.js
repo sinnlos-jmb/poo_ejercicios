@@ -12,8 +12,6 @@ function setProductTypes() {
     productTypes[1].class=Calzado;
     productTypes[2].class=Campera;
     console.log(" productTypes OK!");
-
-
 }
 
 
@@ -25,8 +23,6 @@ class Producto {
         this.stock = stock;
         this.tipo = "";
     }
-
-
 
 
     getDetalles() {
@@ -59,7 +55,7 @@ class Producto {
         }
     }
 
-    static guardarProductos(p_productos) {
+    guardarProductos(p_productos) {
         fs.writeFileSync(path.resolve(__dirname, '../data/productos.json'), JSON.stringify(p_productos, null, 2));
     }
 

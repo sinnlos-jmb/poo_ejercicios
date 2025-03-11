@@ -18,5 +18,25 @@
     "talle": "33",
     "material": "cuero",
     "category": "Calzado"
+  },
+  {
+    "marca": "fila",
+    "modelo": "tenis",
+    "precio": 333,
+    "stock": 44444,
+    "tipo": "",
+    "talle": "32",
+    "material": "lona",
+    "category": "Calzado"
+  },
+  {
+    "marca": "topper",
+    "modelo": "lona",
+    "precio": 111,
+    "stock": 4444,
+    "tipo": "",
+    "talle": "34",
+    "material": "lona",
+    "category": "Calzado"
   }
 ]

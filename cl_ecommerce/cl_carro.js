@@ -17,26 +17,27 @@ class Carro {
         });
     }
 
-    checkout(p_Tienda) {
+    checkout(vec_prds, emp_activo, vec_reporte) {
         let total = 0;
         this.items.forEach(({ producto, cantidad }) => {
-            let productIndex = p_Tienda.productos.findIndex(p => 
+            let productIndex = vec_prds.findIndex(p => 
                 p.marca === producto.marca && 
                 p.modelo === producto.modelo
             );
-            if (productIndex !== -1 && p_Tienda.productos[productIndex].stock >= cantidad) {
-                p_Tienda.productos[productIndex].stock -= cantidad;
+            if (productIndex !== -1 && vec_prds[productIndex].stock >= cantidad) {
+                vec_prds[productIndex].stock -= cantidad;
                 total += producto.precio * cantidad;
             }
         });
-        p_Tienda.registro_ventas.push({ 
-            empleado: p_Tienda.empleadoActivo.nombre, 
+        vec_reporte.push({ 
+            empleado: emp_activo.nombre, 
             items: this.items, 
             total 
         });
-        p_Tienda.saveSales();
+        
         console.log(`\nCheckout Realizado! Total: $${total}\n`);
         this.items = [];
+        return vec_reporte;
         
     }
 }

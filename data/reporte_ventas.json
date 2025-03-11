@@ -35,5 +35,50 @@
       }
     ],
     "total": 1352
+  },
+  {
+    "empleado": "fabricio",
+    "items": [
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 555,
+          "stock": 22220,
+          "tipo": "",
+          "talle": "33",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      },
+      {
+        "producto": {
+          "marca": "fila",
+          "modelo": "tenis",
+          "precio": 333,
+          "stock": 44441,
+          "tipo": "",
+          "talle": "32",
+          "material": "lona",
+          "category": "Calzado"
+        },
+        "cantidad": 3
+      },
+      {
+        "producto": {
+          "marca": "adidas",
+          "modelo": "samba",
+          "precio": 22,
+          "stock": 332,
+          "tipo": "",
+          "talle": "33",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      }
+    ],
+    "total": 2131
   }
 ]
