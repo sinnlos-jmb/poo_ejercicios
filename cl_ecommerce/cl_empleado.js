@@ -22,7 +22,8 @@ class AdminEmpleados {
     }
 
     guardarEmpleados() {
-        fs.writeFileSync(path.resolve(__dirname, '../data/productos.json')), JSON.stringify(this.empleados, null, 2);
+        console.log("guardando empleado: "+JSON.stringify(this.empleados, null, 2) );
+        fs.writeFileSync(path.resolve(__dirname, '../data/empleados.json'), JSON.stringify(this.empleados, null, 2));
     }
 
     addEmpleado(emp) {

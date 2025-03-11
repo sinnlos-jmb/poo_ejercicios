@@ -1,36 +1,39 @@
-const cl_prd = require("./cl_producto");
 const fs = require("fs");
 const path = require('path');
 
+const cl_prd = require("./cl_producto");
+
+const prd=new cl_prd.Producto();
+
+const readline2 = require("readline");
+const rl1 = readline2.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 
 class Tienda {
-    constructor(adminEmpleados, carro) {
-        this.productos = this.cargarProductos();
-        this.sales = this.loadSales();
-        this.adminEmpleados = adminEmpleados;
-        this.carro = carro;
-        this.empleadoActivo = null;
+
+    static productos=[];
+    static registro_ventas=[];
+    static empleadoActivo;
+    static adminEmpleados;
+    static carro;
+    static Menu;
+    constructor(adminEmpleados, carro, p_menu) {
+        Tienda.productos = prd.cargarProductos();
+        console.log("cargo prds de json: "+Tienda.productos);
+        Tienda.registro_ventas = this.loadSales();
+        Tienda.adminEmpleados = adminEmpleados;
+        Tienda.carro = carro;
+        Tienda.empleadoActivo = null;
+        Tienda.Menu=p_menu;
         
-        // Available product types
-        this.productTypes = [
-            { nombre: 'Pantalon', class: cl_prd.Pantalon },
-            { nombre: 'Calzado', class: cl_prd.Calzado },
-            { nombre: 'Campera', class: cl_prd.Campera }
-        ];
+
     }
 
-    cargarProductos() {
-        try {
-            // Parse JSON and reconstruct each product to its correct type
-            const rawProducts = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/productos.json')));
-            return rawProducts.map(productData => cl_prd.Producto.reconstruct(productData));
-        } catch (error) {
-            return [];
-        }
-    }
-
-    guardarProductos() {
-        fs.writeFileSync(path.resolve(__dirname, '../data/productos.json')), JSON.stringify(this.productos, null, 2);
+    static setMenu(p_menu) {
+     Tienda.Menu=p_menu;
     }
 
     loadSales() {
@@ -41,51 +44,23 @@ class Tienda {
         }
     }
 
-    saveSales() {
-        fs.writeFileSync(path.resolve(__dirname, '../data/reporte_ventas.json')), JSON.stringify(this.sales, null, 2);
+    static saveSales() {
+        fs.writeFileSync(path.resolve(__dirname, '../data/reporte_ventas.json'), JSON.stringify(Tienda.registro_ventas, null, 2));
     }
 
-    mostrarProductos() {
+    static mostrarProductos() {
         console.log("\n=== Productos ===");
-        this.productos.forEach((producto, index) => {
+        Tienda.productos.forEach((producto, index) => {
             console.log(`${index + 1}. ${producto.getDetalles()} - $${producto.precio} (Stock: ${producto.stock})`);
         });
     }
 
-    agregarProducto() {
-        // List available product types
-        console.log("\n=== Seleccionar tipo de producto ===");
-        this.productTypes.forEach((type, index) => {
-            console.log(`${index + 1}. ${type.nombre}`);
-        });
 
-        rl.question("Seleccionar tipo de producto: ", (typeChoice) => {
-            const selectedType = this.productTypes[parseInt(typeChoice) - 1];
-            
-            if (!selectedType) {
-                console.log("Tipo de producto seleccionado es invalido.");
-                return;
-            }
-
-            // Common product details... preguntar primero type
-            rl.question("Ingrese marca del producto: ", (marca) => {
-                rl.question("Ingrese modelo del producto: ", (modelo) => {
-                    rl.question("Ingrese precio: ", (precio) => {
-                        rl.question("Enter stock cantidad: ", (stock) => {
-                            // Additional details based on product type
-                            this.addProductByType(selectedType, marca, modelo, precio, stock);
-                        });
-                    });
-                });
-            });
-        });
-    }
-
-    addProductByType(selectedType, marca, modelo, precio, stock) {
+    static addProductByType(selectedType, marca, modelo, precio, stock, p_menu) {
         switch(selectedType.nombre) {
             case 'Pantalon':
-                rl.question("ancho: ", (ancho) => {
-                    rl.question("largo: ", (largo) => {
+                rl1.question("ancho: ", (ancho) => {
+                    rl1.question("largo: ", (largo) => {
                         const nuevoProducto = new selectedType.class(
                         marca, 
                         modelo, 
@@ -94,14 +69,14 @@ class Tienda {
                         ancho,
                         largo
                     );
-                    this.almacenarProducto(nuevoProducto);
+                    Tienda.almacenarProducto(nuevoProducto, p_menu);
                 });
             });
             break;
             
             case 'Calzado':
-                rl.question("Ingresar talles: ", (talles) => {
-                    rl.question("Ingresar material: ", (material) => {
+                rl1.question("Ingresar talles: ", (talles) => {
+                    rl1.question("Ingresar material: ", (material) => {
                         const nuevoProducto = new selectedType.class(
                             marca, 
                             modelo, 
@@ -110,15 +85,15 @@ class Tienda {
                             talles,
                             material
                         );
-                        this.almacenarProducto(nuevoProducto);
+                        Tienda.almacenarProducto(nuevoProducto, p_menu);
                     });
                 });
                 break;
             
             case 'Campera':
-                rl.question("Ingresar temporada: ", (temporada) => {
-                    rl.question("Ingresar talles: ", (talles) => {
-                        rl.question("Ingresar color: ", (color) => {
+                rl1.question("Ingresar temporada: ", (temporada) => {
+                    rl1.question("Ingresar talles: ", (talles) => {
+                        rl1.question("Ingresar color: ", (color) => {
                             const nuevoProducto = new selectedType.class(
                             marca, 
                             modelo, 
@@ -128,72 +103,78 @@ class Tienda {
                             talles,
                             color
                         );
-                        this.almacenarProducto(nuevoProducto);
+                        Tienda.almacenarProducto(nuevoProducto, p_menu);
+                        
                     });
                 });
             });
                 break;
         }
+        
     }
 
-    almacenarProducto(nuevoProducto) {
-        this.productos.push(nuevoProducto);
-        this.guardarProductos();
+    static almacenarProducto(nuevoProducto, p_menu) {
+        Tienda.productos.push(nuevoProducto);
+        cl_prd.Producto.guardarProductos(Tienda.productos);
         console.log("\n✅ Producto agregado exitosamente!");
         console.log(`Detalles: ${nuevoProducto.getDetalles()}\n`);
+        Tienda.Menu.menuPrincipal();
     }
 
-    seleccionarEmpleado() {
-        this.adminEmpleados.mostrarEmpleados();
-        rl.question("Seleccionar nro de empleado: ", (index) => {
-            this.empleadoActivo = this.adminEmpleados.empleados[parseInt(index) - 1];
-            console.log(`\n Empleado a cargo: ${this.empleadoActivo.nombre}\n`);
-            this.menuOperaciones();
+    static seleccionarEmpleado(p_menu) {
+        Tienda.adminEmpleados.mostrarEmpleados();
+        rl1.question("Seleccionar nro de empleado: ", (index) => {
+            Tienda.empleadoActivo = this.adminEmpleados.empleados[parseInt(index) - 1];
+            console.log(`\n Empleado a cargo: ${Tienda.empleadoActivo.nombre}\n`);
+            Tienda.menuOperaciones(p_menu);
         });
     }
 
-    mostrarReporte() {
+    static mostrarReporte() {
         console.log("\n=== Reporte ===");
-        console.log(JSON.stringify(this.sales, null, 2));
+        console.log(JSON.stringify(Tienda.registro_ventas, null, 2));
     }
 
-    menuOperaciones() {
+    static menuOperaciones(p_menu) {
+        //Tienda.Menu.menuPrincipal();
         console.log("\n=== Operaciones ===");
         console.log("1. Agregar al carro");
         console.log("2. Mostrar contenido del carro");
         console.log("3. Checkout");
         console.log("4. Logout");
         
-        rl.question("Seleccionar una opcion: ", (opc) => {
+        rl1.question("Seleccionar una opcion: ", (opc) => {
+            //console.log("menu: "+p_menu.menuPrincipal());
             switch (opc) {
                 case "1":
-                    this.mostrarProductos();
-                    rl.question("Seleccione numero de producto: ", (index) => {
-                        rl.question("Ingrese cantidad: ", (cantidad) => {
-                            this.carro.agregarItem(
-                                this.productos[parseInt(index) - 1], 
+                    Tienda.mostrarProductos();
+                    rl1.question("Seleccione numero de producto: ", (index) => {
+                        rl1.question("Ingrese cantidad: ", (cantidad) => {
+                            Tienda.carro.agregarItem(
+                                Tienda.productos[parseInt(index) - 1], 
                                 parseInt(cantidad)
                             );
-                            this.menuOperaciones();
+                            Tienda.menuOperaciones();
                         });
                     });
                     break;
                 case "2":
-                    this.carro.mostrarCarro();
-                    this.menuOperaciones();
+                    Tienda.carro.mostrarCarro();
+                    Tienda.menuOperaciones();
                     break;
                 case "3":
-                    this.carro.checkout(this);
-                    this.menuOperaciones();
+                    Tienda.carro.checkout(Tienda);
+                    Tienda.Menu.menuPrincipal();
                     break;
                 case "4":
-                    this.empleadoActivo = null;
+                    Tienda.empleadoActivo = null;
+                    Tienda.Menu.menuPrincipal();
                     break;
                 default:
-                    this.menuOperaciones();
+                    Tienda.menuOperaciones();
             }
         });
     }
 }
 
-module.exports = {Tienda }
+module.exports = {Tienda, rl1 }

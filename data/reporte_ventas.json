@@ -75,5 +75,376 @@
       }
     ],
     "total": 10663
+  },
+  {
+    "empleado": "Romedal",
+    "items": [
+      {
+        "producto": {
+          "marca": "reebok",
+          "modelo": "running",
+          "precio": 2222,
+          "stock": 3342,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      },
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3220,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      }
+    ],
+    "total": 11110
+  },
+  {
+    "empleado": "Romedal",
+    "items": [
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3219,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      }
+    ],
+    "total": 3333
+  },
+  {
+    "empleado": "koan",
+    "items": [
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3217,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      },
+      {
+        "producto": {
+          "marca": "reebok",
+          "modelo": "running",
+          "precio": 2222,
+          "stock": 3339,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 3
+      }
+    ],
+    "total": 13332
+  },
+  {
+    "empleado": "fabricio",
+    "items": [],
+    "total": 0
+  },
+  {
+    "empleado": "fabricio",
+    "items": [
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3216,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      },
+      {
+        "producto": {
+          "marca": "reebok",
+          "modelo": "running",
+          "precio": 2222,
+          "stock": 3337,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      },
+      {
+        "producto": {
+          "marca": "fila",
+          "modelo": "tenis",
+          "precio": 333,
+          "stock": 22218,
+          "tipo": "",
+          "talle": "4-12",
+          "material": "lona",
+          "category": "Calzado"
+        },
+        "cantidad": 4
+      }
+    ],
+    "total": 9109
+  },
+  {
+    "empleado": "Romedal",
+    "items": [
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3215,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      },
+      {
+        "producto": {
+          "marca": "reebok",
+          "modelo": "running",
+          "precio": 2222,
+          "stock": 3335,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      },
+      {
+        "producto": {
+          "marca": "fila",
+          "modelo": "tenis",
+          "precio": 333,
+          "stock": 22214,
+          "tipo": "",
+          "talle": "4-12",
+          "material": "lona",
+          "category": "Calzado"
+        },
+        "cantidad": 4
+      }
+    ],
+    "total": 9109
+  },
+  {
+    "empleado": "fabricio",
+    "items": [
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3214,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      },
+      {
+        "producto": {
+          "marca": "fila",
+          "modelo": "tenis",
+          "precio": 333,
+          "stock": 22210,
+          "tipo": "",
+          "talle": "4-12",
+          "material": "lona",
+          "category": "Calzado"
+        },
+        "cantidad": 4
+      }
+    ],
+    "total": 4665
+  },
+  {
+    "empleado": "fermin rodriguez",
+    "items": [
+      {
+        "producto": {
+          "marca": "reebok",
+          "modelo": "running",
+          "precio": 2222,
+          "stock": 3333,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      },
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3213,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      }
+    ],
+    "total": 7777
+  },
+  {
+    "empleado": "fermin rodriguez",
+    "items": [
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3212,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      },
+      {
+        "producto": {
+          "marca": "reebok",
+          "modelo": "running",
+          "precio": 2222,
+          "stock": 3331,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      }
+    ],
+    "total": 7777
+  },
+  {
+    "empleado": "fermin rodriguez",
+    "items": [
+      {
+        "producto": {
+          "marca": "reebok",
+          "modelo": "running",
+          "precio": 2222,
+          "stock": 3329,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      },
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3211,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      }
+    ],
+    "total": 7777
+  },
+  {
+    "empleado": "fabricio",
+    "items": [
+      {
+        "producto": {
+          "marca": "nike",
+          "modelo": "jordan",
+          "precio": 3333,
+          "stock": 3210,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 1
+      },
+      {
+        "producto": {
+          "marca": "reebok",
+          "modelo": "running",
+          "precio": 2222,
+          "stock": 3327,
+          "tipo": "",
+          "talle": "9-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      }
+    ],
+    "total": 7777
+  },
+  {
+    "empleado": "kivics",
+    "items": [
+      {
+        "producto": {
+          "marca": "penguin",
+          "modelo": "abrojo",
+          "precio": 4444,
+          "stock": 333331,
+          "tipo": "",
+          "talle": "3-12",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      },
+      {
+        "producto": {
+          "marca": "mantagne",
+          "modelo": "pola",
+          "precio": 55555,
+          "stock": 333331,
+          "tipo": "",
+          "temporada": "invierno",
+          "talles": "333",
+          "color": "rojo",
+          "category": "Campera"
+        },
+        "cantidad": 1
+      }
+    ],
+    "total": 64443
   }
 ]

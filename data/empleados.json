@@ -10,5 +10,33 @@
   {
     "nombre": "fabricio",
     "rol": "cajero"
+  },
+  {
+    "nombre": "koan",
+    "rol": "cajero"
+  },
+  {
+    "nombre": "moldavsky",
+    "rol": "falsear"
+  },
+  {
+    "nombre": "kivics",
+    "rol": "vecino"
+  },
+  {
+    "nombre": "ferdando",
+    "rol": "cajero"
+  },
+  {
+    "nombre": "yuca",
+    "rol": "repositor"
+  },
+  {
+    "nombre": "reverendo",
+    "rol": "cajer"
+  },
+  {
+    "nombre": "ramiro",
+    "rol": "repostior"
   }
 ]

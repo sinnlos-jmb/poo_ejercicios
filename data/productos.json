@@ -1,42 +1,133 @@
 [
   {
     "marca": "nike",
-    "modelo": "air jordan",
-    "precio": 333,
-    "stock": 3217,
+    "modelo": "jordan",
+    "precio": 3333,
+    "stock": 3210,
     "tipo": "",
-    "talle": "22",
+    "talle": "9-12",
     "material": "cuero",
-    "category": "Clothing"
+    "category": "Calzado"
   },
   {
-    "marca": "reebock",
+    "marca": "reebok",
     "modelo": "running",
-    "precio": 332,
-    "stock": 2218,
+    "precio": 2222,
+    "stock": 3327,
     "tipo": "",
-    "talle": "11",
-    "material": "leather",
-    "category": "Clothing"
+    "talle": "9-12",
+    "material": "cuero",
+    "category": "Calzado"
   },
   {
     "marca": "puma",
-    "modelo": "borusia",
-    "precio": 3333,
-    "stock": 2106,
+    "modelo": "borussia",
+    "precio": 2222,
+    "stock": 33333,
     "tipo": "",
-    "talle": "11",
+    "talle": "9-12",
+    "material": "lona",
+    "category": "Calzado"
+  },
+  {
+    "marca": "fila",
+    "modelo": "tenis",
+    "precio": 333,
+    "stock": 22210,
+    "tipo": "",
+    "talle": "4-12",
+    "material": "lona",
+    "category": "Calzado"
+  },
+  {
+    "marca": "topper",
+    "modelo": "balance",
+    "precio": 33,
+    "stock": 22,
+    "tipo": "",
+    "talle": "22",
+    "material": "3322",
+    "category": "Calzado"
+  },
+  {
+    "marca": "speedo",
+    "modelo": "malla",
+    "precio": 333,
+    "stock": 22222,
+    "tipo": "",
+    "ancho": "34-44",
+    "largo": "23-32",
+    "category": "Pantalon"
+  },
+  {
+    "marca": "nautica",
+    "modelo": "short",
+    "precio": 333,
+    "stock": 2222,
+    "tipo": "",
+    "ancho": "32",
+    "largo": "23",
+    "category": "Pantalon"
+  },
+  {
+    "marca": "converse",
+    "modelo": "allstar",
+    "precio": 3333,
+    "stock": 222223,
+    "tipo": "",
+    "talle": "3",
     "material": "cuero",
-    "category": "Clothing"
+    "category": "Calzado"
+  },
+  {
+    "marca": "umbro",
+    "modelo": "futbol",
+    "precio": 333,
+    "stock": 2,
+    "tipo": "",
+    "talle": "22",
+    "material": "cuero",
+    "category": "Calzado"
   },
   {
     "marca": "levis",
-    "modelo": "505",
-    "precio": 3333,
-    "stock": 2108,
+    "modelo": "333",
+    "precio": 2222,
+    "stock": 44444,
     "tipo": "",
-    "ancho": "30-50",
-    "largo": "32-44",
+    "ancho": "33",
+    "largo": "22",
     "category": "Pantalon"
+  },
+  {
+    "marca": "mantagne",
+    "modelo": "pola",
+    "precio": 55555,
+    "stock": 333331,
+    "tipo": "",
+    "temporada": "invierno",
+    "talles": "333",
+    "color": "rojo",
+    "category": "Campera"
+  },
+  {
+    "marca": "penguin",
+    "modelo": "abrojo",
+    "precio": 4444,
+    "stock": 333331,
+    "tipo": "",
+    "talle": "3-12",
+    "material": "cuero",
+    "category": "Calzado"
+  },
+  {
+    "marca": "flecha",
+    "modelo": "volley",
+    "precio": 111,
+    "stock": 33444,
+    "tipo": "",
+    "talle": "3-12",
+    "material": "lona",
+    "category": "Calzado"
   }
 ]

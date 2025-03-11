@@ -1,3 +1,22 @@
+const fs = require("fs");
+const path = require('path');
+        // Available product types
+        productTypes = [
+            { nombre: 'Pantalon', class: null },
+            { nombre: 'Calzado', class: null },
+            { nombre: 'Campera', class: null }
+        ];
+
+function setProductTypes() {
+    productTypes[0].class=Pantalon;
+    productTypes[1].class=Calzado;
+    productTypes[2].class=Campera;
+    console.log(" productTypes OK!");
+
+
+}
+
+
 class Producto {
     constructor(marca, modelo, precio, stock) {
         this.marca = marca;
@@ -7,12 +26,40 @@ class Producto {
         this.tipo = "";
     }
 
+
+
+
     getDetalles() {
         return `${this.marca} ${this.modelo}`;
     }
+    
+    cargarProductos() {
+        try {
+            // Parse JSON and reconstruct each product to its correct type
+            const rawProducts = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/productos.json')));
+            //console.log("raw: "+rawProducts);
+            //const temp= rawProducts.map(productData => this.reconstruct(productData));
+
+            const temp = [];
+            for (let i = 0; i < rawProducts.length; i++) {
+                temp.push(Producto.reconstruct(rawProducts[i]));
+                }
+
+            console.log("mapped: "+temp);
+            return temp;
+        } catch (error) {
+            return [];
+        }
+    }
+
+    static guardarProductos(p_productos) {
+        fs.writeFileSync(path.resolve(__dirname, '../data/productos.json'), JSON.stringify(p_productos, null, 2));
+    }
+
 
     // Static method to reconstruct the correct product type
     static reconstruct(productData) {
+        console.log("entro a reconstruct!");
         // Determine the product type based on additional properties
         if (productData.ancho !== undefined) {
             return Object.assign(new Pantalon(), productData);
@@ -68,4 +115,4 @@ class Campera extends Producto {
 }
 
 
-module.exports = {Producto, Calzado, Campera, Pantalon }
+module.exports = {Producto, Calzado, Campera, Pantalon, productTypes, setProductTypes }
