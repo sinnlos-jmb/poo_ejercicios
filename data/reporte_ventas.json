@@ -80,5 +80,37 @@
       }
     ],
     "total": 2131
+  },
+  {
+    "empleado": "koan",
+    "items": [
+      {
+        "producto": {
+          "marca": "topper",
+          "modelo": "lona",
+          "precio": 111,
+          "stock": 4441,
+          "tipo": "",
+          "talle": "34",
+          "material": "lona",
+          "category": "Calzado"
+        },
+        "cantidad": 3
+      },
+      {
+        "producto": {
+          "marca": "adidas",
+          "modelo": "samba",
+          "precio": 22,
+          "stock": 331,
+          "tipo": "",
+          "talle": "33",
+          "material": "cuero",
+          "category": "Calzado"
+        },
+        "cantidad": 2
+      }
+    ],
+    "total": 377
   }
 ]

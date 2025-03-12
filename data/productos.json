@@ -38,5 +38,15 @@
     "talle": "34",
     "material": "lona",
     "category": "Calzado"
+  },
+  {
+    "marca": "umbro",
+    "modelo": "donnaruma",
+    "precio": 333,
+    "stock": 55555,
+    "tipo": "",
+    "talle": "33",
+    "material": "cuero",
+    "category": "Calzado"
   }
 ]

@@ -5,7 +5,6 @@ const cl_prd = require("./cl_producto");
 
 const readline2 = require("readline");
 
-
 const adminEmpleados = new cl_empleado.AdminEmpleados();
 const carro = new cl_carro.Carro();
 const prd=new cl_prd.Producto();
@@ -15,7 +14,6 @@ class Menu {
     constructor(){
         this.msg="menu";
         this.vec_prds=prd.cargarProductos();
-        //console.log("cargo prds de json: "+this.vec_prds);      
     }
 
     static str_menu="\n=== Menu Principal ===   \n"+
@@ -36,7 +34,6 @@ class Menu {
         console.log(Menu.str_menu);
         Menu.s_rl.question("Seleccione una opcion: ", function (choice) {
             const mn2=new Menu();
-            let rl2;
             switch (choice) {
                 case "1":
                     Menu.s_rl.question("Ingrese nombre del empleado: ", function(nombre) {
@@ -66,7 +63,6 @@ class Menu {
                             console.log("Tipo de producto seleccionado es invalido.");
                             return;
                         }
-            
                         // Common product details
                         Menu.s_rl.question("Ingrese marca del producto: ", (marca) => {
                             Menu.s_rl.question("Ingrese modelo del producto: ", (modelo) => {
@@ -79,7 +75,6 @@ class Menu {
                             });
                         });
                     });
-                    
                     break;
                 case "5":
                     prd.mostrarProductos(mn2.vec_prds);
@@ -97,9 +92,7 @@ class Menu {
                 default:
                     mn2.menuPrincipal();
             }
-            
         });
-        
     }
 }
 

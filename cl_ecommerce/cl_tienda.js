@@ -19,25 +19,15 @@ class Tienda {
     loadSales() {
         try {
             return JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/reporte_ventas.json')));
-        } catch (error) {
-            return [];
-        }
+        } catch (error) { return []; }
     }
 
     saveSales() {
         fs.writeFileSync(path.resolve(__dirname, '../data/reporte_ventas.json'), JSON.stringify(this.registro_ventas, null, 2));
     }
 
-    mostrarProductos() {
-        console.log("\n=== Productos ===");
-        this.productos.forEach((producto, index) => {
-            console.log(`${index + 1}. ${producto.getDetalles()} - $${producto.precio} (Stock: ${producto.stock})`);
-        });
-    }
-
 
      addProductByType(selectedType, marca, modelo, precio, stock, rl1, menu) {
-
         switch(selectedType.nombre) {
             case 'Pantalon':
                 rl1.question("ancho: ", (ancho) => {
@@ -123,7 +113,6 @@ class Tienda {
         console.log("4. Logout");
         
         rl1.question("Seleccionar una opcion: ", (opc) => {
-            //console.log("menu: "+p_menu.menuPrincipal());
             switch (opc) {
                 case "1":
                     prd.mostrarProductos(mn.vec_prds);

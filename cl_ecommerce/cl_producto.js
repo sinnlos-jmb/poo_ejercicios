@@ -11,7 +11,7 @@ function setProductTypes() {
     productTypes[0].class=Pantalon;
     productTypes[1].class=Calzado;
     productTypes[2].class=Campera;
-    console.log(" productTypes OK!");
+    console.log (" productTypes OK!");
 }
 
 
@@ -40,9 +40,6 @@ class Producto {
         try {
             // Parse JSON and reconstruct each product to its correct type
             const rawProducts = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/productos.json')));
-            //console.log("raw: "+rawProducts);
-            //const temp= rawProducts.map(productData => this.reconstruct(productData));
-
             const temp = [];
             for (let i = 0; i < rawProducts.length; i++) {
                 temp.push(Producto.reconstruct(rawProducts[i]));
@@ -62,7 +59,6 @@ class Producto {
 
     // Static method to reconstruct the correct product type
     static reconstruct(productData) {
-        //console.log("entro a reconstruct!");
         // Determine the product type based on additional properties
         if (productData.ancho !== undefined) {
             return Object.assign(new Pantalon(), productData);
