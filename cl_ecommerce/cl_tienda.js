@@ -27,12 +27,12 @@ class Tienda {
     }
 
 
-     addProductByType(selectedType, marca, modelo, precio, stock, rl1, menu) {
-        switch(selectedType.nombre) {
+     addProducto(tipoProducto, marca, modelo, precio, stock, rl1, menu) {
+        switch(tipoProducto.nombre) {
             case 'Pantalon':
                 rl1.question("ancho: ", (ancho) => {
                     rl1.question("largo: ", (largo) => {
-                        const nuevoProducto = new selectedType.class(
+                        const nuevoProducto = new tipoProducto.class(
                         marca, 
                         modelo, 
                         parseFloat(precio), 
@@ -48,7 +48,7 @@ class Tienda {
             case 'Calzado':
                 rl1.question("Ingresar talles: ", (talles) => {
                     rl1.question("Ingresar material: ", (material) => {
-                        const nuevoProducto = new selectedType.class(
+                        const nuevoProducto = new tipoProducto.class(
                             marca, 
                             modelo, 
                             parseFloat(precio), 
@@ -65,7 +65,7 @@ class Tienda {
                 rl1.question("Ingresar temporada: ", (temporada) => {
                     rl1.question("Ingresar talles: ", (talles) => {
                         rl1.question("Ingresar color: ", (color) => {
-                            const nuevoProducto = new selectedType.class(
+                            const nuevoProducto = new tipoProducto.class(
                             marca, 
                             modelo, 
                             parseFloat(precio), 

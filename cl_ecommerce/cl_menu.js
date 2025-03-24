@@ -57,19 +57,19 @@ class Menu {
                         console.log(`${index + 1}. ${type.nombre}`);
                     });
                     Menu.s_rl.question("Seleccionar tipo de producto: ", (typeChoice) => {
-                        const selectedType = cl_prd.productTypes[parseInt(typeChoice) - 1];
+                        const tipoProducto = cl_prd.productTypes[parseInt(typeChoice) - 1];
                         
-                        if (!selectedType) {
+                        if (!tipoProducto) {
                             console.log("Tipo de producto seleccionado es invalido.");
                             return;
                         }
-                        // Common product details
+                        // detalles comunes
                         Menu.s_rl.question("Ingrese marca del producto: ", (marca) => {
                             Menu.s_rl.question("Ingrese modelo del producto: ", (modelo) => {
                                 Menu.s_rl.question("Ingrese precio: ", (precio) => {
                                     Menu.s_rl.question("Enter stock cantidad: ", (stock) => {
-                                        // detalles adicionales por subproducto
-                                        tienda.addProductByType(selectedType, marca, modelo, precio, stock, Menu.s_rl, mn2);
+                                        // detalles adicionales de subproducto
+                                        tienda.addProducto(tipoProducto, marca, modelo, precio, stock, Menu.s_rl, mn2);
                                     });
                                 });
                             });
