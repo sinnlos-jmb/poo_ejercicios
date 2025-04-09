@@ -1,14 +1,11 @@
 // Definición de la clase CuentaBancaria
-// Esta clase representa una cuenta bancaria básica con operaciones de depósito y retiro
 class CuentaBancaria {
-    // Constructor: Se llama cuando se crea una nueva instancia de CuentaBancaria
-    // Recibe tres parámetros: número de cuenta, nombre del titular y saldo inicial
+    // Constructor: Se invoca cuando se crea una nueva instancia de CuentaBancaria. Recibe tres parámetros: número de cuenta, nombre del titular y saldo inicial
     constructor(numeroCuenta, nombreTitular, saldoInicial) {
-        // Propiedades con guion bajo (_) son una convención para indicar 
-        // que son propiedades "privadas" o que no deberían modificarse directamente
-        this._numeroCuenta = numeroCuenta;       // Número único de la cuenta
-        this._nombreTitular = nombreTitular;     // Nombre del dueño de la cuenta
-        this._saldo = saldoInicial;              // Saldo actual de la cuenta
+        // Propiedades con guion bajo son indica que son propiedades "privadas" o que no deberían modificarse directamente
+        this._numeroCuenta = numeroCuenta;
+        this._nombreTitular = nombreTitular;
+        this._saldo = saldoInicial; 
     }
 
     // Método para mostrar los detalles completos de la cuenta
@@ -18,11 +15,10 @@ class CuentaBancaria {
         console.log(`Saldo: ${this._saldo} $`);
     }
 
-    // Método para realizar un depósito en la cuenta
-    // Aumenta el saldo con el monto ingresado y muestra los nuevos detalles
+    // Método para realizar un depósito en la cuenta. Aumenta el saldo con el monto ingresado y muestra los nuevos detalles
     depositar(monto) {
-        // Validación básica: el monto debe ser positivo
-        if (monto > 0) {
+        
+        if (monto > 0) {    // Validación básica: el monto debe ser positivo
             this._saldo += monto;
             console.log(`Depósito de ${monto} $ realizado con éxito.`);
             this.mostrarDetallesCuenta();
@@ -32,7 +28,6 @@ class CuentaBancaria {
     }
 
     // Método para realizar un retiro de la cuenta
-    // Resta el monto si hay saldo suficiente
     retirar(monto) {
         // Primero verifica si hay saldo suficiente
         if (this._saldo >= monto) {
@@ -52,8 +47,7 @@ class CuentaBancaria {
 
 // Función de demostración para mostrar el uso de la clase
 function demostracion() {
-    // Crear una nueva cuenta bancaria
-    // Parámetros: número de cuenta, nombre, saldo inicial
+    // Crear una nueva cuenta bancaria.  Parámetros: nro de cuenta, nombre, saldo inicial
     const miCuenta = new CuentaBancaria("123456", "Juan Pérez", 1000);
     
     // Mostrar detalles iniciales de la cuenta

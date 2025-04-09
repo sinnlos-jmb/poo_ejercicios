@@ -3,7 +3,7 @@ const http = require("http");
 class Ollama {
 	constructor(apiUrl = "http://localhost:11434/api/generate") {
 		this.apiUrl = new URL(apiUrl);
-		this.llm = "llama2"; // Modelo por defecto
+		this.llm = "gemma3:1b"; // Modelo por defecto
 		this.prompt = "";
 		this.system = "";
 		this.maxTokens = 350;

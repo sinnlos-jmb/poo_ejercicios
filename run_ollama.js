@@ -20,10 +20,9 @@ function promptUser() {
 	});
 }
 
-// Configurar el modelo y opciones
-ollama.setModel("phi4-mini:latest"); // o "mistral", "codellama", etc.
+// Configurar modelo y opciones
+ollama.setModel("phi4-mini:latest"); // o "gemma3:1b", "granite3.2:2b", "llama3.2:1b" etc.
 ollama.setSystemMessage("Eres un asistente útil.");
-ollama.setOptions({ temperature: 0.5, maxTokens: 150, stream: true });
+ollama.setOptions({ temperature: 0.3, maxTokens: 350, stream: true });
 
-// Ejecutar
 promptUser();
