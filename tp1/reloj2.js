@@ -23,6 +23,13 @@ if (this.horas === 24) {
         }
     }
 
+    //metodo para establecer el horario
+    establecerTiempo (hh, mm, ss) {
+        this.horas=hh;
+        this.minutos=mm;
+        this.segundos=ss;
+    }
+
 	//metodo que muestra el horario
     mostrarTiempo() {
         const hh = this.horas < 10 ? `0${this.horas}` : this.horas;
@@ -32,13 +39,27 @@ if (this.horas === 24) {
     }
 
     // Función para que el reloj tenga un comportamiento normal
-    iniciar() {
-        setInterval(() => {
+    iniciar(p_repeticiones=8) {
+        let contador=0 ;
+        const intervalId = setInterval(() => {
+            contador++;
+            if(contador==p_repeticiones) {
+                clearInterval(intervalId);
+            }
             this.avanzar();
-            console.log(this.mostrarTiempo());
+            console.log(this.mostrarTiempo()+" ("+contador+")");
         }, 1000);
     }
 }
 
 const newReloj = new Reloj(14,59,58);
 newReloj.iniciar();
+//newReloj.establecerTiempo(22,2, 55);
+//console.log(newReloj.mostrarTiempo());
+
+/* 
+const newReloj2= new Reloj(19,58,58);
+newReloj2.iniciar();
+const newReloj3= new Reloj(5,58,58);
+newReloj3.iniciar();
+*/

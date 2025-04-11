@@ -1,4 +1,4 @@
-const readline = require("readline");
+const readline = require("readline");  //npm readline
 const Ollama = require("./Ollama");
 
 const rl = readline.createInterface({
@@ -21,7 +21,7 @@ function promptUser() {
 }
 
 // Configurar modelo y opciones
-ollama.setModel("phi4-mini:latest"); // o "gemma3:1b", "granite3.2:2b", "llama3.2:1b" etc.
+ollama.setModel("gemma3:4b"); // phi4-mini:latest "gemma3:1b", "granite3.2:2b", "llama3.2:1b" etc.
 ollama.setSystemMessage("Eres un asistente útil.");
 ollama.setOptions({ temperature: 0.3, maxTokens: 350, stream: true });
 

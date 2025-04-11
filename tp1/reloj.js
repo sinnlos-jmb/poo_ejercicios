@@ -82,6 +82,7 @@ class Reloj {
 
 }
 
+// ide: integrated developement environment (. base de datos (mysql (mariadb)-postgresql) . lenguaje de programacion (js-nodejs) . webserver (expressjs))
 
 
 
