@@ -1,25 +1,25 @@
 // Definición de la clase CuentaBancaria
 class CuentaBancaria {
+    #saldo;
     // Constructor: Se invoca cuando se crea una nueva instancia de CuentaBancaria. Recibe tres parámetros: número de cuenta, nombre del titular y saldo inicial
     constructor(numeroCuenta, nombreTitular, saldoInicial) {
-        // Propiedades con guion bajo son indica que son propiedades "privadas" o que no deberían modificarse directamente
         this._numeroCuenta = numeroCuenta;
         this._nombreTitular = nombreTitular;
-        this._saldo = saldoInicial; 
+        this.#saldo = saldoInicial; 
     }
 
     // Método para mostrar los detalles completos de la cuenta
     mostrarDetallesCuenta() {
         console.log(`Número de Cuenta: ${this._numeroCuenta}`);
         console.log(`Nombre del Titular: ${this._nombreTitular}`);
-        console.log(`Saldo: ${this._saldo} $`);
+        console.log(`Saldo: ${this.#saldo} $`);
     }
 
     // Método para realizar un depósito en la cuenta. Aumenta el saldo con el monto ingresado y muestra los nuevos detalles
     depositar(monto) {
         
         if (monto > 0) {    // Validación básica: el monto debe ser positivo
-            this._saldo += monto;
+            this.#saldo += monto;
             console.log(`Depósito de ${monto} $ realizado con éxito.`);
             this.mostrarDetallesCuenta();
         } else {
@@ -30,8 +30,8 @@ class CuentaBancaria {
     // Método para realizar un retiro de la cuenta
     retirar(monto) {
         // Primero verifica si hay saldo suficiente
-        if (this._saldo >= monto) {
-            this._saldo -= monto;
+        if (this.#saldo >= monto) {
+            this.#saldo -= monto;
             console.log(`Retiro de ${monto} $ realizado con éxito.`);
             this.mostrarDetallesCuenta();
         } else {
@@ -41,7 +41,7 @@ class CuentaBancaria {
 
     // Método getter para obtener el saldo actual (buena práctica de encapsulamiento)
     obtenerSaldo() {
-        return this._saldo;
+        return this.#saldo;
     }
 }
 
@@ -65,6 +65,9 @@ function demostracion() {
     // Intentar retirar más del saldo disponible
     console.log("\n--- Intento de Retiro Inválido ---");
     miCuenta.retirar(2000);
+
+    miCuenta._saldo=1111111111; //intento cambiar el saldo directamente (sin respetar encapsulamiento. Si no defino #saldo con #, permite modificar la propiedad directamente).
+    console.log("solicito saldo despues de cambiar directamente propiedad privada: "+miCuenta.obtenerSaldo());
 }
 
 // Ejecutar la demostración

@@ -1,3 +1,13 @@
+/*
+3️⃣ Ejercicio: Sistema de Comercio Electrónico
+--------------------------------------
+📌 Objetivo: Aprender herencia creando una jerarquía de productos.
+🔹 Tarea: Crear una clase padre `Producto`.
+   - Subclases: `Electrónica`, `Ropa` y `Alimentos`.
+   - Cada subclase tiene un atributo único (`garantía`, `talla` o `fechaCaducidad`).
+*/
+
+
 // Clase Padre: Producto
 class Producto {
     constructor(nombre, precio) {
@@ -19,7 +29,7 @@ class Electronica extends Producto {
 
     mostrarInfo() {
         return `${super.mostrarInfo()} - 🛡️ Garantía: ${this.garantia} años`;
-    }
+        }
 }
 
 // Subclase: Ropa

@@ -1,10 +1,21 @@
+/*
+1️⃣4️⃣ Ejercicio: Sistema de Reservas de Hotel
+--------------------------------------
+📌 Objetivo: Diseñar un sistema de reservas aplicando encapsulamiento y asociaciones.
+🔹 Tarea: Crear clases para `Hotel`, `Habitación` y `Reserva`:
+   - `Hotel` con colección de habitaciones.
+   - `Habitación` con `número`, `tipo`, `precio` y `disponibilidad`.
+   - `Reserva` asociando huéspedes, habitaciones y fechas.
+   - Métodos para verificar disponibilidad y realizar reservas.
+*/
+
 // Clase Habitación
 class Habitacion {
 	#disponible;
 
 	constructor(numero, tipo, precio) {
 		this.numero = numero;
-		this.tipo = tipo; // 'simple', 'doble', etc.
+		this.tipo = tipo; // 'simple', 'doble', 'suite', etc.
 		this.precio = precio;
 		this.#disponible = true;
 	}
@@ -77,12 +88,12 @@ class Hotel {
 		return this.habitaciones[i];
         }
 
-	realizarReserva(nombreHuesped, tipoHabitacion, fechaInicio, fechaFin) {
+	realizarReserva (nombreHuesped, tipoHabitacion, fechaInicio, fechaFin) {
 		const habitacion = this.buscarHabitacionDisponible(tipoHabitacion);
 		if (habitacion) {
 			habitacion.reservar();
-			const reserva = new Reserva(nombreHuesped, habitacion, fechaInicio, fechaFin);
-			this.reservas.push(reserva);
+			const reserva = new Reserva (nombreHuesped, habitacion, fechaInicio, fechaFin); // {nom: nombreHuesped}
+			this.reservas.push(reserva); //{nombre: nombreHuesped, }
 			console.log(`✅ Reserva realizada:\n${reserva.getResumen()}`);
 		} else {
 			console.log(`❌ No hay habitaciones ${tipoHabitacion} disponibles`);
@@ -107,7 +118,8 @@ const hotelParis = new Hotel("Hotel París");
 hotelParis.agregarHabitacion(new Habitacion(101, "simple", 50));
 hotelParis.agregarHabitacion(new Habitacion(102, "doble", 80));
 hotelParis.agregarHabitacion(new Habitacion(103, "doble", 80));
-hotelParis.agregarHabitacion(new Habitacion(201, "suite", 150));
+hotelParis.agregarHabitacion(new Habitacion(201, "suite", 1500));
+hotelParis.agregarHabitacion(new Habitacion(301, "suite", 1500));
 
 // Mostrar habitaciones
 hotelParis.listarHabitaciones();
@@ -116,6 +128,9 @@ hotelParis.listarHabitaciones();
 hotelParis.realizarReserva("Ana López", "doble", "2025-04-20", "2025-04-22");
 hotelParis.realizarReserva("Juan Pérez", "suite", "2025-04-22", "2025-04-25");
 hotelParis.realizarReserva("Luis Torres", "doble", "2025-04-23", "2025-04-26");
+hotelParis.realizarReserva("Jose Ramon", "suite", "2025-07-23", "2025-07-26");
+hotelParis.realizarReserva("Karina Torres", "simple", "2025-04-23", "2025-04-26");
+hotelParis.realizarReserva("Jose Ramon", "suite", "2026-07-23", "2026-07-26");
 
 // Ver habitaciones después de reservar
 hotelParis.listarHabitaciones();
