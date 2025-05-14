@@ -2,13 +2,14 @@ const fs = require("fs");
 const path = require('path');
 
 const cl_prd = require("./cl_producto");
+
 const prd=new cl_prd.Producto;
 
 
 class Tienda {
     constructor(p_adminEmps, p_carro) {
-        this.registro_ventas=this.loadSales();
-        this.productos = prd.cargarProductos();
+        this.registro_ventas=this.cargaVentas();
+        this.productos = cl_prd.Producto.cargarProductos();
         this.empleadoActivo=null;
         this.adminEmpleados=p_adminEmps;
         this.carro = p_carro;
@@ -16,13 +17,13 @@ class Tienda {
     }
 
 
-    loadSales() {
+    cargaVentas() {
         try {
             return JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/reporte_ventas.json')));
         } catch (error) { return []; }
     }
 
-    saveSales() {
+    guardaVentas() {
         fs.writeFileSync(path.resolve(__dirname, '../data/reporte_ventas.json'), JSON.stringify(this.registro_ventas, null, 2));
     }
 
@@ -102,7 +103,19 @@ class Tienda {
 
     mostrarReporte() {
         console.log("\n=== Reporte ===");
-        console.log(JSON.stringify(this.registro_ventas, null, 2));
+        //console.log(JSON.stringify(this.registro_ventas, null, 2));
+        console.log("this.registro_ventas: "+this.registro_ventas);
+
+        for (var key in this.registro_ventas) {
+              console.log("nro de venta:", key, "Empleado:", this.registro_ventas[key].empleado+", Total: $"+this.registro_ventas[key].total);
+              console.log("cant de items: "+this.registro_ventas[key].items.length);
+              if(this.registro_ventas[key].items.length>0){
+                console.log("item1: "+this.registro_ventas[key].items[0].producto.category+", "+this.registro_ventas[key].items[0].producto.marca+", "+this.registro_ventas[key].items[0].producto.modelo+", $"+this.registro_ventas[key].items[0].producto.precio);
+                console.log("cantidad: "+this.registro_ventas[key].items[0].cantidad);
+                }
+          }
+
+          
     }
 
     menuOperaciones(rl1, mn) {
@@ -115,11 +128,13 @@ class Tienda {
         rl1.question("Seleccionar una opcion: ", (opc) => {
             switch (opc) {
                 case "1":
-                    prd.mostrarProductos(mn.vec_prds);
+                    //prd.mostrarProductos(mn.vec_prds);
+                    prd.mostrarProductos(this.productos);
+                    //console.log("mn.vec_prds: "+mn.vec_prds);
                     rl1.question("Seleccione numero de producto: ", (index) => {
                         rl1.question("Ingrese cantidad: ", (cantidad) => {
                             this.carro.agregarItem(
-                                mn.vec_prds[parseInt(index) - 1], 
+                               this.productos[parseInt(index) - 1], 
                                 parseInt(cantidad)
                             );
                             this.menuOperaciones(rl1, mn);
@@ -132,8 +147,8 @@ class Tienda {
                     break;
                 case "3":
                     this.productos=mn.vec_prds;
-                    this.saveSales(this.carro.checkout(this.productos, this.empleadoActivo, this.registro_ventas));
-                    this.registro_ventas=this.loadSales();
+                    this.guardaVentas(this.carro.checkout(this.productos, this.empleadoActivo, this.registro_ventas));
+                    this.registro_ventas=this.cargaVentas();
                     mn.menuPrincipal();
                     break;
                 case "4":

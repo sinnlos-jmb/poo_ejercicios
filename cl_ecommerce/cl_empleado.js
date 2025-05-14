@@ -8,6 +8,8 @@ class Empleado {
     }
 }
 
+
+
 class AdminEmpleados {
     constructor() {
         this.empleados = this.cargarEmpleados();

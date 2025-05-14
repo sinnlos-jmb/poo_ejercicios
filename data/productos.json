@@ -48,5 +48,26 @@
     "talle": "33",
     "material": "cuero",
     "category": "Calzado"
+  },
+  {
+    "marca": "puma",
+    "modelo": "jogging",
+    "precio": 3331,
+    "stock": 78,
+    "tipo": "",
+    "ancho": "34",
+    "largo": "36",
+    "category": "Pantalon"
+  },
+  {
+    "marca": "puma",
+    "modelo": "entrenamiento",
+    "precio": 4443,
+    "stock": 334,
+    "tipo": "",
+    "temporada": "invierno",
+    "talles": "33-66",
+    "color": "gris",
+    "category": "Campera"
   }
 ]

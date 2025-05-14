@@ -13,7 +13,7 @@ const tienda=new cl_tienda.Tienda(adminEmpleados, carro);
 class Menu {
     constructor(){
         this.msg="menu";
-        this.vec_prds=prd.cargarProductos();
+        this.vec_prds=cl_prd.Producto.cargarProductos();
     }
 
     static str_menu="\n=== Menu Principal ===   \n"+
@@ -53,9 +53,16 @@ class Menu {
                 case "4":
                     console.log("\n=== Seleccionar tipo de producto ===");
                     cl_prd.setProductTypes();
-                    cl_prd.productTypes.forEach((type, index) => {
+                    
+                    /*cl_prd.productTypes.forEach((type, index) => {
                         console.log(`${index + 1}. ${type.nombre}`);
-                    });
+                    });*/
+
+                    for (let i = 0; i < cl_prd.productTypes.length; i++) {
+                        let type = cl_prd.productTypes[i];
+                        console.log((i + 1) + ". " + type.nombre);
+                    }
+
                     Menu.s_rl.question("Seleccionar tipo de producto: ", (typeChoice) => {
                         const tipoProducto = cl_prd.productTypes[parseInt(typeChoice) - 1];
                         
@@ -81,7 +88,7 @@ class Menu {
                     mn2.menuPrincipal();
                     break;
                 case "6":
-                    console.log("instancia tienda??  "+tienda.productos);
+                    //console.log("instancia tienda??  "+tienda.productos);
                     tienda.mostrarReporte();
                     mn2.menuPrincipal();
                     break;
