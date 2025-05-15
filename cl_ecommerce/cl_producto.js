@@ -1,18 +1,20 @@
 const fs = require("fs");
 const path = require('path');
-        // Available product types
-        productTypes = [
-            { nombre: 'Pantalon', class: null },
-            { nombre: 'Calzado', class: null },
-            { nombre: 'Campera', class: null }
-        ];
+
+// tipos de producto
+let productTypes = [
+    { nombre: 'Pantalon', class: null },
+    { nombre: 'Calzado', class: null },
+    { nombre: 'Campera', class: null }
+];
 
 function setProductTypes() {
     productTypes[0].class=Pantalon;
     productTypes[1].class=Calzado;
     productTypes[2].class=Campera;
-    console.log (" productTypes OK!");
+    //console.log (" productTypes OK!");
 }
+
 
 
 class Producto {
@@ -24,7 +26,6 @@ class Producto {
         this.tipo = "";
     }
 
-
     getDetalles() {
         return `${this.marca} ${this.modelo}`;
     }
@@ -35,10 +36,18 @@ class Producto {
             console.log(`${index + 1}. ${producto.getDetalles()} - $${producto.precio} (Stock: ${producto.stock})`);
         });
     }
+
+    mostrarProductos2() {
+        console.log("\n=== Productos ===");
+        this.produ.forEach((producto, index) => {
+            console.log(`${index + 1}. ${producto.getDetalles()} - $${producto.precio} (Stock: ${producto.stock})`);
+        });
+    }
+   
     
-    cargarProductos() {
+    static cargarProductos() {
         try {
-            // Parse JSON and reconstruct each product to its correct type
+            // Parse JSON y reconstruye cada producto como un objeto
             const rawProducts = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/productos.json')));
             const temp = [];
             for (let i = 0; i < rawProducts.length; i++) {
@@ -57,9 +66,8 @@ class Producto {
     }
 
 
-    // Static method to reconstruct the correct product type
+    // metodo static para reconstrir los objetos almacenados en el archivo
     static reconstruct(productData) {
-        // Determine the product type based on additional properties
         if (productData.ancho !== undefined) {
             return Object.assign(new Pantalon(), productData);
         } else if (productData.talle !== undefined) {
@@ -67,7 +75,7 @@ class Producto {
         } else if (productData.dimensions !== undefined) {
             return Object.assign(new Campera(), productData);
         }
-        // Default to base Product if no specific type is found
+        // x default clase Producto
         return Object.assign(new Producto(), productData);
     }
 }
