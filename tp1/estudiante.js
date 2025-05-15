@@ -5,6 +5,17 @@ class Estudiante {
     this.#calificaciones = [];
   }
 
+  //un metodo static pertenece a la clase y no a los objetos que instancias esa clase.
+  static calcularPromedio (notas) {  
+    let sum=0;
+    for (let i=0; i<notas.length; i++) {
+      sum+=notas[i];
+      console.log(notas[i]);
+      }
+    return (sum/notas.length).toFixed(2);
+
+  }
+
   agregarCalificacion(nota) {
     if (nota >= 0 && nota <= 10) { 
       this.#calificaciones.push(nota);
@@ -13,6 +24,10 @@ class Estudiante {
       console.log(`La nota ${nota} no es válida. Debe estar entre 0 y 10.`);
     }
   }
+
+ getPromedio() {
+  return Estudiante.calcularPromedio (this.#calificaciones);
+ }
 
   // Método para calcular el promedio
   obtenerPromedio() {
@@ -49,6 +64,11 @@ estudiante1.agregarCalificacion(8);
 estudiante1.agregarCalificacion(9);
 estudiante1.agregarCalificacion(7);
 estudiante1.agregarCalificacion(10);
-estudiante1.agregarCalificacion(-5); // Nota no válida
+//estudiante1.agregarCalificacion(-5); // Nota no válida
 
-estudiante1.mostrarInfo();
+//console.log(estudiante1.calcularPromedio([4, 7, 9]));
+//console.log(Estudiante.calcularPromedio([10, 3, 8]));
+
+//estudiante1.mostrarInfo();
+//const estudiante2 = new Estudiante("María García");
+console.log(estudiante1.getPromedio());
