@@ -69,5 +69,15 @@
     "talles": "33-66",
     "color": "gris",
     "category": "Campera"
+  },
+  {
+    "marca": "reebok",
+    "modelo": "training",
+    "precio": 4455,
+    "stock": 55,
+    "tipo": "",
+    "ancho": "34",
+    "largo": "50",
+    "category": "Pantalon"
   }
 ]

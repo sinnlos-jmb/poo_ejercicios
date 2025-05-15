@@ -85,7 +85,8 @@ class Tienda {
 
 
     almacenarProducto(nuevoProducto, menu) {
-        menu.vec_prds.push(nuevoProducto);
+        //menu.vec_prds.push(nuevoProducto);
+        this.productos.push(nuevoProducto);
         this.prd.guardarProductos(menu.vec_prds);
         console.log("\n✅ Producto agregado exitosamente!");
         console.log(`Detalles: ${nuevoProducto.getDetalles()}\n`);
@@ -101,7 +102,7 @@ class Tienda {
         });
     }
 
-    mostrarReporte() {
+    mostrarReporte() {  //agregar todos los productos por compra, y cuáles fueron las compras de mayor y de menor valor.
         console.log("\n=== Reporte ===");
         //console.log(JSON.stringify(this.registro_ventas, null, 2));
         console.log("this.registro_ventas: "+this.registro_ventas);
