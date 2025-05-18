@@ -87,7 +87,7 @@ class Tienda {
     almacenarProducto(nuevoProducto, menu) {
         //menu.vec_prds.push(nuevoProducto);
         this.productos.push(nuevoProducto);
-        this.prd.guardarProductos(menu.vec_prds);
+        this.prd.guardarProductos(this.productos);
         console.log("\n✅ Producto agregado exitosamente!");
         console.log(`Detalles: ${nuevoProducto.getDetalles()}\n`);
         menu.menuPrincipal();
