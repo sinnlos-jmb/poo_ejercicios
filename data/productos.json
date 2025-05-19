@@ -79,5 +79,16 @@
     "ancho": "34",
     "largo": "50",
     "category": "Pantalon"
+  },
+  {
+    "marca": "adidas",
+    "modelo": "lluvia",
+    "precio": 2222,
+    "stock": 21,
+    "tipo": "",
+    "temporada": "otoño",
+    "talles": "33-55",
+    "color": "rojo",
+    "category": "Campera"
   }
 ]

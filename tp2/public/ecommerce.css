@@ -1,0 +1,51 @@
+    .grid-container {
+      display: grid;
+      grid-template-columns: auto 1fr; /* Two columns: auto width for nav, remaining for main */
+      grid-template-rows: auto auto 1fr auto; /* Four rows: header, nav (initially), main, footer */
+      grid-template-areas:
+        "header  header"
+        "nav     main"
+        "nav     main"
+        "footer  footer";
+      min-height: 100vh; /* Ensure the grid takes at least the full viewport height */
+    }
+
+    header {
+      grid-area: header;
+      background-color: #f0f0f0;
+      padding: 1em;
+      text-align: center;
+    }
+
+    nav {
+      grid-area: nav;
+      background-color: #ddd;
+      padding: 1em;
+    }
+
+    main {
+      grid-area: main;
+      padding: 1em;
+    }
+
+    footer {
+      grid-area: footer;
+      background-color: #333;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+
+ 
+    @media (max-width: 600px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto 1fr auto;
+        grid-template-areas:
+          "header"
+          "nav"
+          "main"
+          "main"
+          "footer";
+      }
+    }
