@@ -14,7 +14,7 @@ const lib_c = require("./code/consts");
 
 const grid1="<!DOCTYPE html><html><head><title>PRUEBA EXPRESS</title>"+
         "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"+
-        "<link rel='stylesheet' href='/ecommerce.css'></head>"+
+        "<link rel='stylesheet' href='/ecommerce.css'><script src='/ecommerce_scripts.js'></script></head>"+
         "<body>"+
         "<div class='grid-container'>"+
           "<header><h1>App de Ecommerce - POO</h1>"+
@@ -45,8 +45,8 @@ app.get('/segunda', (req, res) => {
 let rta=grid1+
           "<h1>Modelo de app</h1><p>prueba en la segunda ruta</p>"+
           "<button onclick='alert();'>btn prueba</button><br>"+
-          "<select name='s_rol'><option value='cajero'>cajero</option><option value='repositor'>repositor</option></select>"+
-    grid2;        
+          ""+
+          grid2;        
 res.send(rta);
   })
 
@@ -54,26 +54,60 @@ res.send(rta);
 app.get('/productos', async function (req, res) {
 
 const params = { op: req.query.op || '', query: '' , logged:true};  
+const prd = { marca: req.query.marca || '', modelo:  req.query.modelo || '' , 
+              precio:  req.query.precio || '', stock:  req.query.stock || '', 
+              categ:  req.query.categ || ''};  
 let rta=grid1;
 if (params.op=='lista') {
     rta+="<h2>Lista de productos</h2><br>";
     
 try {
 			const value = await lib_c.get_vec_productos();
-
 			if (value != null) {
-				rta+=value[0].id+", "+value[0].marca+", "+value[0].modelo+", "+value[0].precio+", "+value[0].stock;
+        rta+="<ul>";
+        for (let i=0;i<value.length;i++) {
+  				rta+="<li>"+value[i].id+", "+value[i].marca+", "+value[i].modelo+", $"+value[i].precio+", "+value[i].stock+"</li>";
+          }
+      rta+="</ul>";
         }
+      else {
+        rta+="No hay registros.";
+
+      }
     }
 		catch (error) { rta+=error; }
 
     
     }
 else if (params.op=='nuevo') {
-    rta+="<h2>Nuevo producto</h2>"
+    rta+="<h2>Nuevo producto</h2><br>"+
+          "<select name='s_rol' onchange='new_form(this.value);'><option value='0'>tipo producto</option><option value='1'>calzado</option><option value='2'>campera</option><option value='3'>pantalon</option></select>\n"+
+          "<div id='new_f'></div>";
+
     }
+else if (params.op=='submit') {
+      rta+="<h2>Insertar producto en la dbase</h2><br>"+
+          "<ul>datos del form: "+
+          "<li>marca: "+prd.marca+"</li>"+
+          "<li>modelo: "+prd.modelo+"</li>"+
+          "<li>precio: "+prd.precio+"</li>"+
+          "<li>stock: "+prd.stock+"</li>"+
+          "<li>categ: "+prd.categ+"</li></ul>";
+
+      try {
+            const value = await lib_c.insert_producto(prd);
+            if (value != null) {
+              rta+=value;
+              }
+            else {
+              rta+="No se insertaron registros.";
+              }
+          }
+          catch (error) { rta+=error; }          
+
+    }    
 else {
-    rta+="<h2>Listar Productos  |  Nuevo producto</h2>"
+    rta+="<h2><a href='/productos?op=lista'>Listar Productos</a>  |  <a href='/productos?op=nuevo'>Nuevo producto</a></h2>"
     }
 rta+=grid2;
 res.send(rta);

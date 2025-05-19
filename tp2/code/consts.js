@@ -50,6 +50,23 @@ async function get_vec_productos() {
     return rta;
 }
 
+async function insert_producto(prd) {
+    let rta = "";
+	const conn = await pool.getConnection(), query="insert into productos  (marca, modelo, precio, stock, id_categoria) "+
+                                    "Values ('"+prd.marca+"', '"+prd.modelo+"', "+prd.precio+", "+prd.stock+", "+prd.categ+")";
+
+
+	try {
+			const r=await conn.query(query);
+			rta="OK. affectedRows:"+r.affectedRows.toString()+", insertId:"+r.insertId.toString();
+		}
+	catch (err) {console.log("error en funcion insert\n"+err);rta=err;} 
+	finally { 
+		if (conn)  await conn.end();
+		return rta;
+		}
+}
+
 module.exports = {
-    pool, get_connection, get_vec_productos, int_l
+    pool, get_connection, get_vec_productos, int_l, insert_producto
 };
