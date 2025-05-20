@@ -2,6 +2,7 @@
       margin-top: 0px;
       margin-bottom: 0px;
     }
+    h2 { text-align: center;}
     
     .grid-container {
       display: grid;
