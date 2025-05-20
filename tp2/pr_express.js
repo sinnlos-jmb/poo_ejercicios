@@ -6,10 +6,11 @@ const port = 3060;
 
 const options = { maxAge: '2h', etag: false };  //cambiar a 2d
 app.use(express.static('public', options));
-app.use(session({ secret: "1234", resave: false, saveUninitialized: false, }));
+app.use(session({ secret: "1111", resave: false, saveUninitialized: false, }));
 
 const { request } = require('http');
 const lib_c = require("./code/consts");
+const { Producto, Calzado, Campera, Pantalon } = require('./code/classes');
 
 
 const grid1="<!DOCTYPE html><html><head><title>PRUEBA EXPRESS</title>"+
@@ -37,6 +38,8 @@ const grid1="<!DOCTYPE html><html><head><title>PRUEBA EXPRESS</title>"+
 
 
 
+
+
 app.get('/', (req, res) => {
   res.send('Hello World!<br>LOGIN!');
 })
@@ -53,31 +56,22 @@ res.send(rta);
 
 app.get('/productos', async function (req, res) {
 
+if (!Producto.load) {
+  Producto.cargar_vec();
+
+}
+
 const params = { op: req.query.op || '', query: '' , logged:true};  
 const prd = { marca: req.query.marca || '', modelo:  req.query.modelo || '' , 
               precio:  req.query.precio || '', stock:  req.query.stock || '', 
-              categ:  req.query.categ || ''};  
-let rta=grid1;
+              categ:  req.query.categ || '', talles:  req.query.talles || '', 
+              material:  req.query.material || '', 
+              temporada:  req.query.temporada || '', color:  req.query.color || '',
+              ancho:  req.query.ancho || '', largo:  req.query.largo || ''};
+
+              let rta=grid1;
 if (params.op=='lista') {
-    rta+="<h2>Lista de productos</h2><br>";
-    
-try {
-			const value = await lib_c.get_vec_productos();
-			if (value != null) {
-        rta+="<ul>";
-        for (let i=0;i<value.length;i++) {
-  				rta+="<li>"+value[i].id+", "+value[i].marca+", "+value[i].modelo+", $"+value[i].precio+", "+value[i].stock+"</li>";
-          }
-      rta+="</ul>";
-        }
-      else {
-        rta+="No hay registros.";
-
-      }
-    }
-		catch (error) { rta+=error; }
-
-    
+    rta+="<h2>Lista de productos</h2><br>"+Producto.getProductos();
     }
 else if (params.op=='nuevo') {
     rta+="<h2>Nuevo producto</h2><br>"+
@@ -92,10 +86,13 @@ else if (params.op=='submit') {
           "<li>modelo: "+prd.modelo+"</li>"+
           "<li>precio: "+prd.precio+"</li>"+
           "<li>stock: "+prd.stock+"</li>"+
-          "<li>categ: "+prd.categ+"</li></ul>";
+          "<li>categ: "+prd.categ+"("+Producto.categs[prd.categ]+")</li></ul>";
+          if (prd.categ==1) {Producto.addProducto(new Calzado(prd.id, prd.marca, prd.modelo, prd.precio, prd.stock, prd.talles, prd.material));}
+          else if (prd.categ==2) {Producto.addProducto(new Campera(prd.id, prd.marca, prd.modelo, prd.precio, prd.stock, prd.talles, prd.temporada, prd.color));}
+          else if (prd.categ==3) {Producto.addProducto(new Pantalon(prd.id, prd.marca, prd.modelo, prd.precio, prd.stock, prd.ancho, prd.largo));}
 
       try {
-            const value = await lib_c.insert_producto(prd);
+            const value = await Producto.insert_producto(prd);
             if (value != null) {
               rta+=value;
               }
@@ -103,7 +100,7 @@ else if (params.op=='submit') {
               rta+="No se insertaron registros.";
               }
           }
-          catch (error) { rta+=error; }          
+      catch (error) { rta+=error; }          
 
     }    
 else {

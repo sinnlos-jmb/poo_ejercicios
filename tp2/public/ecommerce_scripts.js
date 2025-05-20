@@ -1,26 +1,26 @@
 function new_form(categ) {
-    //alert (categ);
-    const container = document.getElementById('new_f');
 
-    // Clear any existing content (optional)
+    const container = document.getElementById('new_f');
     container.innerHTML = '';
 
-    // Create the form
+    // Crear form
     const form = document.createElement('form');
     form.setAttribute('method', 'get');
     form.setAttribute('action', '/productos')
 
-    // Create input field
+    // Crear inputs
     let input = document.createElement('input');
     input.setAttribute('type', 'text');
     input.setAttribute('name', 'marca');
     input.setAttribute('placeholder', 'Marca del producto');
+    input.className = 'input_l';
     form.appendChild(input);
 
     input = document.createElement('input');
     input.setAttribute('type', 'text');
     input.setAttribute('name', 'modelo');
     input.setAttribute('placeholder', 'Modelo del producto');
+    input.className = 'input_l';
     form.appendChild(input);
 
     input = document.createElement('input');
@@ -49,15 +49,73 @@ function new_form(categ) {
     input.setAttribute('value', 'submit');
     form.appendChild(input);
 
-    // Create submit button
+    if (categ==1) {
+        input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('name', 'material');
+        input.setAttribute('placeholder', 'Material');
+        input.className = 'input_l';
+        form.appendChild(input);
+
+        input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('name', 'talles');
+        input.setAttribute('placeholder', 'Talles');
+        input.className = 'input_l';
+        form.appendChild(input);    
+
+        }
+    else if (categ==2) {  //campera
+        input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('name', 'talles');
+        input.setAttribute('placeholder', 'Talles');
+        input.className = 'input_l';
+        form.appendChild(input);
+
+        input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('name', 'temporada');
+        input.setAttribute('placeholder', 'Temporada');
+        input.className = 'input_l';
+        form.appendChild(input);
+
+        input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('name', 'color');
+        input.setAttribute('placeholder', 'Color');
+        input.className = 'input_l';
+        form.appendChild(input);
+
+        }
+    else if (categ==3) { //pantalon
+        form.appendChild(document.createElement('br'));
+        input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('name', 'ancho');
+        input.setAttribute('placeholder', 'Ancho');
+        input.className = 'input_small';
+        form.appendChild(input);
+
+        input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('name', 'largo');
+        input.setAttribute('placeholder', 'largo');
+        input.className = 'input_small';
+        form.appendChild(input);        
+        }
+    else {
+        container.innerHTML = '';
+        return;
+    }
+
+    // submit 
     const submit = document.createElement('button');
     submit.setAttribute('type', 'submit');
     submit.textContent = 'Submit';
     submit.className = 'submit_btn';
 
-    // Append button to form
     form.appendChild(submit);
 
-    // Append form to the container
     container.appendChild(form);
 }

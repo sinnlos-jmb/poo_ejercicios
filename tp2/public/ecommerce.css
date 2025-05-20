@@ -1,3 +1,8 @@
+    body {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    
     .grid-container {
       display: grid;
       grid-template-columns: auto 1fr; /* Two columns: auto width for nav, remaining for main */
@@ -19,7 +24,7 @@
 
     nav {
       grid-area: nav;
-      background-color: #ddd;
+      background-color: #f4e7e7;;
       padding: 1em;
     }
 
@@ -36,15 +41,16 @@
       text-align: center;
     }
 
-    .input_small {
-      max-width: 50px;
-    }
+
+    .input_small { max-width: 50px; }
+    .input_l { display: block; }
     
    .submit_btn {
       /*padding: 8px 16px;font-size: 14px;border: none;*/
       background-color: #4CAF50;
       color: white;
       cursor: pointer;
+      display: block;
     }
 
  

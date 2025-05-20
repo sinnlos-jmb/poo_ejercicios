@@ -31,42 +31,7 @@ function get_connection() {
     });
 }
 
-async function get_vec_productos() {
-    let conn, rta = [];
-    try {
-        conn = await pool.getConnection();
-        rows = await conn.query("select id_producto, marca, modelo, id_categoria, precio, stock, talles, material, ancho, largo, temporada, color "+ 
-                                "from productos");
-        for (var i in rows) {
-            rta.push({id: rows[i].id_producto, marca: rows[i].marca, modelo:rows[i].modelo, precio:rows[i].precio, stock: rows[i].stock});
-        }
-
-    } catch (err) {
-        console.log(err);
-        rta = "error!" + err;
-    } finally {
-        if (conn) await conn.release();
-    }
-    return rta;
-}
-
-async function insert_producto(prd) {
-    let rta = "";
-	const conn = await pool.getConnection(), query="insert into productos  (marca, modelo, precio, stock, id_categoria) "+
-                                    "Values ('"+prd.marca+"', '"+prd.modelo+"', "+prd.precio+", "+prd.stock+", "+prd.categ+")";
 
 
-	try {
-			const r=await conn.query(query);
-			rta="OK. affectedRows:"+r.affectedRows.toString()+", insertId:"+r.insertId.toString();
-		}
-	catch (err) {console.log("error en funcion insert\n"+err);rta=err;} 
-	finally { 
-		if (conn)  await conn.end();
-		return rta;
-		}
-}
 
-module.exports = {
-    pool, get_connection, get_vec_productos, int_l, insert_producto
-};
+module.exports = { pool, get_connection, int_l };
