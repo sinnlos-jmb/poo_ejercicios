@@ -10,7 +10,7 @@ app.use(session({ secret: "1111", resave: false, saveUninitialized: false, }));
 
 const { request } = require('http');
 const lib_c = require("./code/consts");
-const { Producto, Calzado, Campera, Pantalon } = require('./code/classes');
+const { Producto, Calzado, Campera, Pantalon, Empleado } = require('./code/classes');
 
 
 const grid1="<!DOCTYPE html><html><head><title>PRUEBA EXPRESS</title>"+
@@ -24,7 +24,7 @@ const grid1="<!DOCTYPE html><html><head><title>PRUEBA EXPRESS</title>"+
             "<ul>"+
             "<li><a href='/segunda'>Home</a></li>"+
             "<li><a href='/productos'>Productos</a></li>"+
-            "<li><a href='#'>Empleados</a></li>"+
+            "<li><a href='/empleados'>Empleados</a></li>"+
             "<li><a href='#'>Ventas</a></li>"+
             "</ul>"+
           "</nav>"+
@@ -77,7 +77,6 @@ else if (params.op=='nuevo') {
     rta+="<h2>Nuevo producto</h2><br>"+
           "<select name='s_rol' onchange='new_form(this.value);'><option value='0'>tipo producto</option><option value='1'>calzado</option><option value='2'>campera</option><option value='3'>pantalon</option></select>\n"+
           "<div id='new_f'></div>";
-
     }
 else if (params.op=='submit') {
       rta+="<h2>Insertar producto en la dbase</h2><br>"+
@@ -87,6 +86,7 @@ else if (params.op=='submit') {
           "<li>precio: "+prd.precio+"</li>"+
           "<li>stock: "+prd.stock+"</li>"+
           "<li>categ: "+prd.categ+"("+Producto.categs[prd.categ]+")</li></ul>";
+          //agregar al vec_productos en el metodo insert
           if (prd.categ==1) {Producto.addProducto(new Calzado(prd.id, prd.marca, prd.modelo, prd.precio, prd.stock, prd.talles, prd.material));}
           else if (prd.categ==2) {Producto.addProducto(new Campera(prd.id, prd.marca, prd.modelo, prd.precio, prd.stock, prd.talles, prd.temporada, prd.color));}
           else if (prd.categ==3) {Producto.addProducto(new Pantalon(prd.id, prd.marca, prd.modelo, prd.precio, prd.stock, prd.ancho, prd.largo));}
@@ -108,7 +108,64 @@ else {
     }
 rta+=grid2;
 res.send(rta);
-  })  
+  })
+
+
+
+app.get('/empleados', async function (req, res) {
+
+if (!Empleado.load) {
+  Empleado.cargar_vec();
+  }
+
+const params = { op: req.query.op || '', logged:true};  
+const emp = { id: req.query.id_empleado || '', nombre:  req.query.nom_empleado || '' , 
+              apellido:  req.query.ape_empleado || '', dni:  req.query.dni_empleado || '', 
+              rol:  req.query.rol_empleado || ''};
+
+              let rta=grid1;
+if (params.op=='lista') {
+    rta+="<h2>Lista de empleados</h2><br>"+Empleado.getEmpleados();
+    }
+else if (params.op=='nuevo') {
+    rta+="<h2>Nuevo empleado</h2><br>"+
+          "<form action='/empleados' method='get'>"+
+          " <p><label for='nom_empleado'>Nombre:</label> <input type='text' id='nom_empleado' name='nom_empleado' /> </p>"+
+          " <p><label for='ape_empleado'>Apellido:</label> <input type='text' id='ape_empleado' name='ape_empleado' /> </p>"+
+          " <p><label for='dni_empleado'>DNI:</label> <input type='text' id='dni_empleado' name='dni_empleado' /> </p>"+
+          " <p><label for='rol_empleado'>Rol:</label> <select name='rol_empleado'><option value='cajero'>cajero</option><option value='reposicion'>reposicion</option><option value='administracion'>administracion</option><option value='supervisor'>supervisor</option></select>\n</p>"+
+          "<p> <button type='submit'>Guardar</button></p>"+
+          "<input type='hidden' name='op' value='submit'></form>";
+
+    }
+else if (params.op=='submit') {
+      rta+="<h2>Insertar empleado en la dbase</h2><br>"+
+          "<ul>datos del form: "+
+          "<li>nombre: "+emp.nombre+"</li>"+
+          "<li>apellido: "+emp.apellido+"</li>"+
+          "<li>dni: "+emp.dni+"</li>"+
+          "<li>rol: "+emp.rol+"</li></ul>";
+      Empleado.addEmpleado(new Empleado(emp.id, emp.apellido, emp.nombre, emp.dni, emp.rol));
+
+      try {
+            const value = await Empleado.insert_empleado(emp);
+            if (value != null) {
+              rta+=value;
+              }
+            else {
+              rta+="No se insertaron registros.";
+              }
+          }
+      catch (error) { rta+=error; }          
+
+    }
+else {
+    rta+="<h2><a href='/empleados?op=lista'>Listar Empleados</a>  |  <a href='/empleados?op=nuevo'>Nuevo empleado</a></h2>"
+    }
+rta+=grid2;
+res.send(rta);
+  })
+  
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

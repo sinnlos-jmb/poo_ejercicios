@@ -57,8 +57,6 @@ class Producto {
     let rta = "";
 	const conn = await lib_c.pool.getConnection(), query="insert into productos  (marca, modelo, precio, stock, id_categoria, talles, material, temporada, color, ancho, largo) "+
                                     "Values ('"+prd.marca+"', '"+prd.modelo+"', "+prd.precio+", "+prd.stock+", "+prd.categ+", '"+prd.talles+"', '"+prd.material+"', '"+prd.temporada+"', '"+prd.color+"', '"+prd.ancho+"', '"+prd.largo+"')";
-
-
 	try {
 			const r=await conn.query(query);
 			rta="OK. affectedRows:"+r.affectedRows.toString()+", insertId:"+r.insertId.toString();
@@ -70,22 +68,6 @@ class Producto {
 		}
 }
 
-
-    
-    static cargarProductos() {
-        try {
-            // Parse JSON y reconstruye cada producto como un objeto
-            const rawProducts = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/productos.json')));
-            const temp = [];
-            for (let i = 0; i < rawProducts.length; i++) {
-                temp.push(Producto.reconstruct(rawProducts[i]));
-                }
-
-            return temp;
-        } catch (error) {
-            return [];
-        }
-    }
 
     guardarProductos(p_productos) {
 
@@ -135,4 +117,103 @@ class Campera extends Producto {
 }
 
 
-module.exports = {Producto, Calzado, Campera, Pantalon }
+
+class Empleado {
+
+    static vec_empleados=[];
+    static load=false;
+
+    constructor(id='',nombre, apellido,dni, rol) {
+        this.nombre = nombre;
+        this.apellido=apellido;
+        this.dni=dni
+        this.rol = rol;
+        this.id=id;
+    }
+
+static getEmpleados(){
+    let rta="";
+    for (let i=0; i<Empleado.vec_empleados.length;i++) {rta+=Empleado.vec_empleados[i].getDetalles()+"<br>";}
+    return rta;
+    }
+
+static addEmpleado(emp) {
+    Empleado.vec_empleados.push(emp);
+}
+
+
+getDetalles () {
+    return this.id+". "+this.apellido+", "+this.nombre+", "+this.dni+", "+this.rol;
+
+}
+
+static async cargar_vec() {
+        let conn, rows;
+        try {
+            conn = await lib_c.pool.getConnection();
+            rows = await conn.query("select id_empleado, nombre_empleado, apellido_empleado, dni_empleado, rol_empleado "+ 
+                                    "from empleados");
+            for (let i in rows) {
+                Empleado.addEmpleado(new Empleado(rows[i].id_empleado, rows[i].nombre_empleado, rows[i].apellido_empleado, rows[i].dni_empleado, rows[i].rol_empleado));
+                }
+
+        } catch (err) {
+            console.log(err);
+            return{rta: false, msg: err};
+        } finally {
+            if (conn) await conn.release();
+            }
+        Empleado.load=true;
+        return {rta: true, msg:''};
+
+        }
+
+static async insert_empleado(emp) {
+    let rta = "";
+	const conn = await lib_c.pool.getConnection(), query="insert into empleados  (nombre_empleado, apellido_empleado, dni_empleado, rol_empleado) "+
+                                    "Values ('"+emp.nombre+"', '"+emp.apellido+"', '"+emp.dni+"', '"+emp.rol+"')";
+	try {
+			const r=await conn.query(query);
+			rta="OK. affectedRows:"+r.affectedRows.toString()+", insertId:"+r.insertId.toString();
+		}
+	catch (err) {console.log("error en funcion insert\n"+err);rta=err;} 
+	finally { 
+		if (conn)  await conn.end();
+		return rta;
+		}
+}
+
+}
+
+
+
+class AdminEmpleados {
+    constructor() {
+        this.empleados = this.cargarEmpleados();
+    }
+
+    cargar_vec() {
+        try {
+            return JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/empleados.json')));
+        } catch (error) {
+            return [];
+        }
+    }
+
+    guardarEmpleados() {
+        console.log("guardando empleado: "+JSON.stringify(this.empleados, null, 2) );
+        fs.writeFileSync(path.resolve(__dirname, '../data/empleados.json'), JSON.stringify(this.empleados, null, 2));
+    }
+
+    mostrarEmpleados() {
+        console.log("\n=== Empleados ===");
+        this.empleados.forEach((empleado, index) => {
+            console.log(`${index + 1}. ${empleado.nombre} - ${empleado.rol}`);
+        });
+    }
+}
+
+
+
+
+module.exports = {Producto, Calzado, Campera, Pantalon, Empleado, AdminEmpleados }
