@@ -151,8 +151,9 @@ app.get('/ventas', async function (req, res) {
             " <p><label for='total_venta'>Total:</label> <input type='text' id='total_venta' name='total_venta' /> </p>"+
             " <p><label for='fecha'>Fecha:</label> <input type='text' id='fecha' name='fecha' value='"+fecha+"' /> </p>"+
             " <p><label for='dni_cliente'>DNI cliente:</label> <input type='text' name='dni_cliente' id='dni_cliente' /></p>"+
-            "<p> <button type='submit'>Guardar</button></p>"+
-            "<input type='hidden' name='op' value='submit'></form>";
+            "<p> <button type='submit'>Guardar</button> <button type='button' onclick='add_carro();'>Agregar producto</button> <button type='button' onclick='update_carro();'>Actualizar</button></p>"+
+            "<input type='hidden' name='op' value='submit'></form>"+
+            "<br><div id='carro' class='carro'></div>";
       }
   else if (params.op=='submit') {
         rta+="<h2>Insertar venta en la dbase</h2><br>"+

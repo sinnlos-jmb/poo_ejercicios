@@ -1,3 +1,35 @@
+function add_carro ()  {
+    const container = document.getElementById('carro');
+    let input = document.createElement('input');
+    input.setAttribute('type', 'text');
+    input.setAttribute('name', 'id_producto');
+    input.setAttribute('placeholder', 'ID del producto');
+    container.appendChild(input);
+
+    input = document.createElement('input');
+    input.setAttribute('type', 'text');
+    input.setAttribute('name', 'cantidad');
+    input.setAttribute('placeholder', 'cantidad');
+    input.className = 'input_small';
+    container.appendChild(input);
+}
+
+function update_carro () {
+  const productos = document.getElementsByName('id_producto');
+  const cantidades = document.getElementsByName('cantidad');
+
+  let resumen = '';
+  for (let i = 0; i < productos.length; i++) {
+    const prd = productos[i].value;
+    const cant = cantidades[i] ? cantidades[i].value : '';
+    resumen += `Producto ${i + 1}: ${prd}, Cantidad: ${cant}\n`;
+  }
+
+  alert(resumen);
+}
+
+
+
 function new_form(categ) {
 
     const container = document.getElementById('new_f');

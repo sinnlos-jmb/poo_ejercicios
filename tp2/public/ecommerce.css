@@ -53,6 +53,12 @@
       cursor: pointer;
       display: block;
     }
+  
+  .carro {
+    background-color: lightgrey;
+    min-height: 50px;
+    width: 300px;
+  }
 
  
     @media (max-width: 600px) {

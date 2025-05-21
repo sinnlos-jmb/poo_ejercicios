@@ -8,7 +8,7 @@ const pool_size = 3;
 const port = 3306;
 
 const d1=new Date();
-const fecha=d1.getDate()+"/"+parseInt(d1.getMonth()+1)+"/"+d1.getFullYear()
+const fecha=String(d1.getDate()).padStart(2, '0')+"/"+String(d1.getMonth() + 1).padStart(2, '0')+"/"+d1.getFullYear();
 
 
 const htmls={grid1:"<!DOCTYPE html><html><head><title>Ecommerce - OPP</title>"+
