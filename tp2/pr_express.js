@@ -1,3 +1,4 @@
+//viewport y load en true tras primera ejecución
 const express = require('express')
 const session = require("express-session");
 

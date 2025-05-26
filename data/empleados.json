@@ -54,5 +54,9 @@
   {
     "nombre": "javier",
     "rol": "cajero"
+  },
+  {
+    "nombre": "Marcela",
+    "rol": "vendedora"
   }
 ]

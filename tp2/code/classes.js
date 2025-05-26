@@ -40,7 +40,7 @@ class Producto {
                 else if  (rows[i].id_categoria==2) {Producto.addProducto(new Campera(rows[i].id_producto, rows[i].marca, rows[i].modelo, rows[i].precio, rows[i].stock, rows[i].talles, rows[i].temporada, rows[i].color)); }
                 else if  (rows[i].id_categoria==3) {Producto.addProducto(new Pantalon(rows[i].id_producto, rows[i].marca, rows[i].modelo, rows[i].precio, rows[i].stock, rows[i].ancho, rows[i].largo)); }
                 }
-            } 
+            }
         catch (err) {
             console.log(err);
             return{rta: false, msg: err};} 
