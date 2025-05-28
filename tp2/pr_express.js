@@ -136,6 +136,12 @@ app.get('/ventas', async function (req, res) {
   if (!Venta.load) {
     Venta.cargar_vec();
     }
+  if (!Empleado.load) {
+    Empleado.cargar_vec();
+    }
+  if (!Producto.load) {
+    Producto.cargar_vec();
+    }
   const params = { op: req.query.op || '', logged:true};  
   const venta = { id_empleado: req.query.id_empleado || '', total:  req.query.total_venta || '' , 
                 fecha:  req.query.fecha || fecha, dni_cliente:  req.query.dni_cliente || '', 
@@ -146,9 +152,11 @@ app.get('/ventas', async function (req, res) {
       rta+="<h2>Lista de ventas</h2><br>"+Venta.getVentas();
       }
   else if (params.op=='nuevo') {
+      rta=htmls.grid_header+"<script>";
+      rta+=Producto.get_vec_js_productos()+"</script>"+htmls.grid_main;
       rta+="<h2>Nueva venta</h2><br>"+
             "<form action='/ventas' method='get'>"+
-            " <p><label for='id_empleado'>Empleado:</label> <input type='text' id='id_empleado' name='id_empleado' /> </p>"+
+            " <p><label for='id_empleado'>Empleado:</label> "+Empleado.getDDEmpleados()+" </p>"+
             " <p><label for='total_venta'>Total:</label> <input type='text' id='total_venta' name='total_venta' /> </p>"+
             " <p><label for='fecha'>Fecha:</label> <input type='text' id='fecha' name='fecha' value='"+fecha+"' /> </p>"+
             " <p><label for='dni_cliente'>DNI cliente:</label> <input type='text' name='dni_cliente' id='dni_cliente' /></p>"+

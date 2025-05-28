@@ -33,7 +33,24 @@ const htmls={grid1:"<!DOCTYPE html><html><head><title>Ecommerce - OPP</title>"+
               "<p>&copy; 2025 My Website</p>"+
             "</footer>"+
           "</div>"+
-        "</body></html>"};
+        "</body></html>",
+      grid_header:"<!DOCTYPE html><html><head><title>Ecommerce - OPP</title>"+
+        "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"+
+        "<link rel='stylesheet' href='/ecommerce.css'><script src='/ecommerce_scripts.js'></script></head>"+
+        "<body>"+
+        "<div class='grid-container'>"+
+          "<header><h1>App de Ecommerce - POO</h1>",
+      grid_main: "</header>"+
+          "<nav>"+
+            "<ul>"+
+            "<li><a href='/'>Home</a></li>"+
+            "<li><a href='/productos'>Productos</a></li>"+
+            "<li><a href='/empleados'>Empleados</a></li>"+
+            "<li><a href='/ventas'>Ventas</a></li>"+
+            "<li><a href='#'>Login</a></li>"+
+            "</ul>"+
+          "</nav>"+
+        "<main>"};
 
 const int_l=new Intl.NumberFormat('es-AR', {
     minimumFractionDigits: 2,

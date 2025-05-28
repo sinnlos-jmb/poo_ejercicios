@@ -1,10 +1,49 @@
 function add_carro ()  {
+
+    //alert (vec_prds+"\n"+JSON.stringify(vec_prds));
     const container = document.getElementById('carro');
+    
     let input = document.createElement('input');
     input.setAttribute('type', 'text');
     input.setAttribute('name', 'id_producto');
     input.setAttribute('placeholder', 'ID del producto');
-    container.appendChild(input);
+    //container.appendChild(input);
+
+    input = document.createElement('select');
+    input.id = 'id_producto';
+    input.name = 'id_producto';
+
+   
+const defaultOption = document.createElement('option');
+defaultOption.value = '';
+defaultOption.textContent = 'Seleccionar producto';
+defaultOption.disabled = true;
+defaultOption.selected = true;
+input.appendChild(defaultOption);
+
+const grup1 = document.createElement('optgroup');
+grup1.label = 'Calzado';
+const grup2 = document.createElement('optgroup');
+grup2.label = 'Campera';
+const grup3 = document.createElement('optgroup');
+grup3.label = 'Pantalones';
+
+
+ for (let i =0; i<vec_prds.length;i++) {
+  const optionElement = document.createElement('option');
+  optionElement.value = vec_prds[i].id;
+  optionElement.textContent = vec_prds[i].marca+", "+vec_prds[i].modelo+", $"+vec_prds[i].precio;
+  
+  //input.appendChild(optionElement);
+  if (vec_prds[i].categoria==1) { grup1.appendChild(optionElement); }
+  else if (vec_prds[i].categoria==2) { grup2.appendChild(optionElement); }
+  else if (vec_prds[i].categoria==3) { grup3.appendChild(optionElement); }
+}
+
+input.appendChild(grup1);
+input.appendChild(grup2);
+input.appendChild(grup3);
+container.appendChild(input);
 
     input = document.createElement('input');
     input.setAttribute('type', 'text');
@@ -12,20 +51,28 @@ function add_carro ()  {
     input.setAttribute('placeholder', 'cantidad');
     input.className = 'input_small';
     container.appendChild(input);
+
+    input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', 'precio');
+    container.appendChild(input);
 }
 
 function update_carro () {
   const productos = document.getElementsByName('id_producto');
   const cantidades = document.getElementsByName('cantidad');
-
-  let resumen = '';
+  //const selectedOption = productos.options[productos[0].selectedIndex];
+  //alert (productos[0].options[productos[0].selectedIndex].text);
+  let resumen = '', total=0;
   for (let i = 0; i < productos.length; i++) {
     const prd = productos[i].value;
     const cant = cantidades[i] ? cantidades[i].value : '';
     resumen += `Producto ${i + 1}: ${prd}, Cantidad: ${cant}\n`;
+    const str=productos[i].options[productos[i].selectedIndex].text;
+    total+=parseInt(str.substring(str.lastIndexOf('$') + 1)*cant);
   }
-
-  alert(resumen);
+  document.getElementById('total_venta').value=total;
+  alert(resumen+"\ntotal: "+total);
 }
 
 

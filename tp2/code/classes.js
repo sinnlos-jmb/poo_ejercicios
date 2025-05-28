@@ -29,12 +29,27 @@ class Producto {
         return rta;
         }
 
+//devuelve drop down de producto
+static getDDProductos(){
+    let rta="<select id='id_producto' name='id_producto'><option value='0'>Seleccionar producto</option>";
+    for (let i=0; i<Producto.vec_productos.length;i++) {
+        rta+="<option value='"+Producto.vec_productos[i].id+"'>"+Producto.vec_productos[i].marca+", "+Producto.vec_productos[i].modelo+"</option>";}
+    return rta+"</select>";
+    }        
+//array en navegador para agregar drop down en nueva venta
+static get_vec_js_productos(){
+    let rta="const vec_prds=[";
+    for (let i=0; i<Producto.vec_productos.length;i++) {
+        rta+="{id:"+Producto.vec_productos[i].id+", marca:'"+Producto.vec_productos[i].marca+"', modelo: '"+Producto.vec_productos[i].modelo+"', precio: "+Producto.vec_productos[i].precio+", categoria: "+Producto.vec_productos[i].category+"},";}
+    return rta+"];";
+    }        
+
     static async cargar_vec() {
         let conn, rows;
         try {
             conn = await lib_c.pool.getConnection();
             rows = await conn.query("select id_producto, marca, modelo, id_categoria, precio, stock, talles, material, ancho, largo, temporada, color "+ 
-                                    "from productos");
+                                    "from productos order by id_categoria");
             for (let i in rows) {
                 if  (rows[i].id_categoria==1) {Producto.addProducto(new Calzado(rows[i].id_producto, rows[i].marca, rows[i].modelo, rows[i].precio, rows[i].stock, rows[i].talles, rows[i].material)); }
                 else if  (rows[i].id_categoria==2) {Producto.addProducto(new Campera(rows[i].id_producto, rows[i].marca, rows[i].modelo, rows[i].precio, rows[i].stock, rows[i].talles, rows[i].temporada, rows[i].color)); }
@@ -63,6 +78,7 @@ class Producto {
             if (prd.categ==1) {Producto.addProducto(new Calzado(r.insertId.toString(), prd.marca, prd.modelo, prd.precio, prd.stock, prd.talles, prd.material));}
             else if (prd.categ==2) {Producto.addProducto(new Campera(r.insertId.toString(), prd.marca, prd.modelo, prd.precio, prd.stock, prd.talles, prd.temporada, prd.color));}
             else if (prd.categ==3) {Producto.addProducto(new Pantalon(r.insertId.toString(), prd.marca, prd.modelo, prd.precio, prd.stock, prd.ancho, prd.largo));}
+            Producto.load=false;
 		}
 	catch (err) {console.log("error en funcion insert\n"+err);rta=err;} 
 	finally { 
@@ -138,8 +154,17 @@ static getEmpleados(){
 
 static addEmpleado(emp) {
     Empleado.vec_empleados.push(emp);
+    Empleado.load=false;
 }
 
+//devuelve drop down de empleados
+static getDDEmpleados(){
+    //console.log("ingreso a get drop down empleados: "+Empleado.vec_empleados.length);
+    let rta="<select id='id_empleado' name='id_empleado'><option value='0'>Seleccionar empleado</option>";
+    for (let i=0; i<Empleado.vec_empleados.length;i++) {
+        rta+="<option value='"+Empleado.vec_empleados[i].id+"'>"+Empleado.vec_empleados[i].nombre+" "+Empleado.vec_empleados[i].apellido+"</option>";}
+    return rta+"</select>";
+    }
 
 getDetalles () {
     return this.id+". "+this.apellido+", "+this.nombre+", "+this.dni+", "+this.rol;
