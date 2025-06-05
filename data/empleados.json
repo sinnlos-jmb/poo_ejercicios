@@ -58,5 +58,9 @@
   {
     "nombre": "Marcela",
     "rol": "vendedora"
+  },
+  {
+    "nombre": "Jose Ramirez",
+    "rol": "repositor"
   }
 ]

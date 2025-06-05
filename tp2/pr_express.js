@@ -10,20 +10,50 @@ app.use(express.static('public', options));
 app.use(session({ secret: "1111", resave: false, saveUninitialized: false, }));
 
 const {htmls, fecha} = require("./code/consts");
-const { Producto, Empleado, Venta } = require('./code/classes');
+const { Producto, Empleado, Venta, Login } = require('./code/classes');
 
 
 
 
 
 
-app.get('/', (req, res) => {
-let rta=htmls.grid1+
-          "<h2 style='text-align: center;'>Modelo de app: gestion tienda online</h2>"+
-          htmls.grid2;        
-res.send(rta);
+app.get('/', async function (req, res) {
+  const params = { op: req.query.op || '', usuario: req.query.usuario || '', pwd: req.query.pwd || '1221' , logged:false};
+  let rta=htmls.grid1;
+
+  if (params.op=="auth"){
+      const o_user=new Login (params.usuario, params.pwd);
+      const rta_m= await o_user.autenticar();
+      console.log(rta_m.message);
+      rta+= "funcion de autenticación: "+rta_m.message;
+      }
+  else if (params.op=="new"){
+      rta+= "<h2 style='text-align: center;'>Modelo de app: gestion tienda online</h2>"+
+            "<h3>Nuevo Usuario</h3>"+
+            " <form method='get' action='/'>"+
+            "<p><label for='usuario'>Nombre: </label> <input type='text' id='usuario' name='usuario' /> </p>"+
+            "<p><label for='pwd'>Contraseña: </label> <input type='password' id='pwd' name='pwd' /> </p>"+      
+              "<p> <button type='submit'>Registrarse</button></p>"+
+              "<input type='hidden' name='op' value='submit'></form>";
+      }
+  else if (params.op=="submit"){
+      const o_user=new Login (params.usuario, params.pwd);
+      const rta_m= await o_user.nuevo_usuario();
+      console.log(rta_m);
+      rta+= "funcion de insert nuevo user: "+rta_m;
+      }
+  else {
+      rta+= "<h2 style='text-align: center;'>Modelo de app: gestion tienda online</h2>"+
+            "<h3>Login</h3>"+
+            " <form method='get' action='/'>"+
+            "<p><label for='usuario'>Nombre: </label> <input type='text' id='usuario' name='usuario' /> </p>"+
+            "<p><label for='pwd'>Contraseña: </label> <input type='password' id='pwd' name='pwd' /> </p>"+        
+              "<p> <button type='submit'>Login</button>  <button type='button' onclick='window.location.href=\"?op=new\"'>Registrarse</button></p>"+
+              "<input type='hidden' name='op' value='auth'></form>";
+      }    
+
+      res.send(rta+htmls.grid2);
   })
-
 
 
 
@@ -189,6 +219,25 @@ app.get('/ventas', async function (req, res) {
   res.send(rta);
   })
     
+
+app.get('/encuentrame', async function (req, res) {
+
+  const params = { op: req.query.op || '', logged:true};  
+  const venta = { id_empleado: req.query.id_empleado || '', total:  req.query.total_venta || '' , 
+                fecha:  req.query.fecha || fecha, dni_cliente:  req.query.dni_cliente || '', 
+                detalle:  req.query.detalle || ''};
+
+
+  rta="<!DOCTYPE html><html><head><title>Encuentrame</title>"+
+        "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"+
+        "<link rel='stylesheet' href='/ecommerce.css'><script src='/ecommerce_scripts.js'></script></head>"+
+        "<body>"+
+        "<h3>pagina de prueba para login</h3>"+
+        "</body></html>";
+  res.send(rta);
+  })
+
+
 
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

@@ -1,5 +1,5 @@
 const lib_c = require("./consts");
-
+const bcrypt = require('bcrypt');  //npm install bcrypt
 
 class Producto {
     static vec_productos=[];
@@ -154,7 +154,6 @@ static getEmpleados(){
 
 static addEmpleado(emp) {
     Empleado.vec_empleados.push(emp);
-    Empleado.load=false;
 }
 
 //devuelve drop down de empleados
@@ -200,10 +199,11 @@ static async insert_empleado(emp) {
 			const r=await conn.query(query);
 			rta="OK. affectedRows:"+r.affectedRows.toString()+", insertId:"+r.insertId.toString();
             Empleado.addEmpleado(new Empleado(r.insertId.toString(), emp.nombre, emp.apellido, emp.dni, emp.rol));
-		}
+            Empleado.load=false;
+        }
 	catch (err) {console.log("error en funcion insert\n"+err);rta=err;} 
 	finally { 
-		if (conn)  await conn.end();
+		if (conn)  await conn.release();
 		return rta;
 		}
     }
@@ -283,4 +283,77 @@ static async insert_venta(venta) {
 
 
 
-module.exports = {Producto, Empleado, Venta }
+
+class Login {
+  #pwd="";
+  constructor(puser, ppwd) {
+    this.user = puser;
+    this.#pwd=ppwd;
+  }
+
+  async autenticar() {
+        console.log("ingreso a autenticar");
+        const conn = await lib_c.pool.getConnection();
+        const pwd_hash=await bcrypt.hash(this.#pwd, 10);
+        console.log("hash de pwd: "+this.#pwd+":"+pwd_hash);
+
+
+        try {
+        const rows = await conn.execute(
+            'SELECT nombre_usuario, pwd_usuario FROM usuarios WHERE nombre_usuario = ?',
+            [this.user]
+        );
+
+        /*
+    CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_usuario VARCHAR(255) NOT NULL,
+    pwd_usuario VARCHAR(255) NOT NULL -- almacenada con bcrypt
+    );
+        */
+
+        if (rows.length === 0) {
+            console.log("usuario no encontrado");
+            return { success: false, message: 'Usuario no encontrado' };
+        }
+
+        const user = rows[0].nombre_usuario, pwd=rows[0].pwd_usuario;
+
+        
+
+        const match = await bcrypt.compare(this.#pwd, pwd);
+        console.log(match);
+
+        if (match) {
+            console.log("usuario encontrado!");
+            return { success: true, message: 'Login exitoso', user: user.nombre_usuario };
+        } else {
+            return { success: false, message: 'Contraseña incorrecta' };
+        }
+        } catch (error) {
+        return { success: false, message: 'Error en autenticación', error };
+        } finally {
+        await conn.release();
+        }
+  }
+
+  async nuevo_usuario () {
+    let rta = "";
+    const pwd_hash=await bcrypt.hash(this.#pwd, 10);
+	const conn = await lib_c.pool.getConnection(), query="insert into usuarios  (nombre_usuario, pwd_usuario) "+
+                                    "Values ('"+this.user+"', '"+pwd_hash+"')";
+	try {
+			const r=await conn.query(query);
+			rta="OK. affectedRows:"+r.affectedRows.toString()+", insertId:"+r.insertId.toString();
+            }
+	catch (err) {console.log("error en funcion insert user\n"+err);rta=err;} 
+	finally { 
+		if (conn)  await conn.release();
+		return rta;
+		}
+    }
+}
+
+
+
+module.exports = {Producto, Empleado, Venta, Login }
