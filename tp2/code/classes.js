@@ -85,7 +85,7 @@ static get_vec_js_productos(){
 		if (conn)  await conn.end();
 		return rta;
 		}
-    }
+    } 
 
 }
 
